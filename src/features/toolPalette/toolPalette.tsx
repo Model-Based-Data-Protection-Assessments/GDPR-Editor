@@ -68,45 +68,15 @@ export class ToolPaletteUI extends AbstractUIExtension implements IActionHandler
         this.addTool(
             containerElement,
             this.nodeCreationTool,
-            "Storage node",
-            (tool) => tool.enable("node:storage"),
-            <g>
-                <rect x="10%" y="20%" width="80%" height="60%" stroke-width="1" />
-                <line x1="25%" y1="20%" x2="25%" y2="80%" stroke-width="1" />
-                <text x="55%" y="50%">
-                    Sto
-                </text>
-            </g>,
-            "KeyS",
-        );
-
-        this.addTool(
-            containerElement,
-            this.nodeCreationTool,
-            "Input/Output node",
-            (tool) => tool.enable("node:input-output"),
+            "GDPR node",
+            (tool) => tool.enable("node:gdpr-entity"),
             <g>
                 <rect x="10%" y="20%" width="80%" height="60%" stroke-width="1" />
                 <text x="50%" y="50%">
-                    IO
+                    Node
                 </text>
             </g>,
-            "KeyN",
-        );
-
-        this.addTool(
-            containerElement,
-            this.nodeCreationTool,
-            "Function node",
-            (tool) => tool.enable("node:function"),
-            <g>
-                <rect x="10%" y="20%" width="80%" height="60%" rx="20%" ry="20%" />
-                <line x1="10%" y1="65%" x2="90%" y2="65%" />
-                <text x="50%" y="44%">
-                    Fun
-                </text>
-            </g>,
-            "KeyF",
+            "KeyS",
         );
 
         this.addTool(
@@ -124,34 +94,6 @@ export class ToolPaletteUI extends AbstractUIExtension implements IActionHandler
                 <line x1="10%" y1="10%" x2="75%" y2="75%" attrs-stroke-width="2" attrs-marker-end="url(#arrowhead)" />
             </g>,
             "KeyE",
-        );
-
-        this.addTool(
-            containerElement,
-            this.portCreationTool,
-            "Input port",
-            (tool) => tool.enable("port:dfd-input"),
-            <g>
-                <rect x="25%" y="25%" width="50%" height="50%" />
-                <text x="50%" y="50%">
-                    I
-                </text>
-            </g>,
-            "KeyI",
-        );
-
-        this.addTool(
-            containerElement,
-            this.portCreationTool,
-            "Output port",
-            (tool) => tool.enable("port:dfd-output"),
-            <g>
-                <rect x="25%" y="25%" width="50%" height="50%" />
-                <text x="50%" y="50%">
-                    O
-                </text>
-            </g>,
-            "KeyO",
         );
 
         containerElement.classList.add("tool-palette");
