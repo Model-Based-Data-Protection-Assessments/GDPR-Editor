@@ -1,10 +1,10 @@
 {
-    "name": "data-flow-analysis-web-editor",
+    "name": "gdpr-web-editor",
     "version": "0.1.0",
     "private": true,
     "repository": {
         "type": "git",
-        "url": "https://github.com/DataFlowAnalysis/WebEditor.git"
+        "url": "https://github.com/Model-Based-Data-Protection-Assessments/GDPR-Editor.git"
     },
     "devDependencies": {
         "@fortawesome/fontawesome-free": "^6.4.2",
