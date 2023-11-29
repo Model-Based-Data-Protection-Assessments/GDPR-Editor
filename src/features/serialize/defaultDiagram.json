@@ -25,60 +25,6 @@
         "children": [
             {
                 "position": {
-                    "x": 227.72569865194055,
-                    "y": 13.670914698356416
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "c82g8",
-                "type": "empty-node",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 196.35827800565554,
-                    "y": 16.46156522622485
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "exjrdn",
-                "type": "empty-node",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 233.98643645824112,
-                    "y": 16.46156522622485
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "st1uis",
-                "type": "empty-node",
-                "children": []
-            },
-            {
-                "position": {
                     "x": 111.5,
                     "y": 105
                 },
@@ -117,24 +63,6 @@
             },
             {
                 "position": {
-                    "x": 239.5653964984552,
-                    "y": 24.886714727085476
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "i82jzo",
-                "type": "empty-node",
-                "children": []
-            },
-            {
-                "position": {
                     "x": 92,
                     "y": 140
                 },
@@ -150,24 +78,6 @@
                 "features": {},
                 "id": "ziat6",
                 "type": "node:gdpr-entity",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 240.19361483007208,
-                    "y": 16.40576725025747
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "0bqwgd",
-                "type": "empty-node",
                 "children": []
             },
             {
@@ -191,132 +101,6 @@
             },
             {
                 "position": {
-                    "x": 304.5859938208033,
-                    "y": 13.264675592173049
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "qi9a2s",
-                "type": "empty-node",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 362.6961894953656,
-                    "y": 23.00205973223484
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "b9tg6k",
-                "type": "empty-node",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 364.8949536560247,
-                    "y": 84.88156539649847
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "nm55wj",
-                "type": "empty-node",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 323.74665293511845,
-                    "y": 151.78681771369725
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "rfuac6",
-                "type": "empty-node",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 255.51696997121942,
-                    "y": 195.04098655743104
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "utk01k",
-                "type": "empty-node",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 359.01717383260467,
-                    "y": 142.3072307250009
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "swjwnq",
-                "type": "empty-node",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 354.04764488699504,
-                    "y": 158.28071662160332
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "uqe3p",
-                "type": "empty-node",
-                "children": []
-            },
-            {
-                "position": {
                     "x": 240,
                     "y": 175
                 },
@@ -332,24 +116,6 @@
                 "features": {},
                 "id": "gkhge",
                 "type": "node:gdpr-entity",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 382.0899867943637,
-                    "y": 157.57078391508765
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "qk7fy",
-                "type": "empty-node",
                 "children": []
             },
             {
@@ -372,24 +138,6 @@
             },
             {
                 "position": {
-                    "x": 219.16043064901902,
-                    "y": 237.08324704484193
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "09teii",
-                "type": "empty-node",
-                "children": []
-            },
-            {
-                "position": {
                     "x": 191.5,
                     "y": 215
                 },
@@ -405,24 +153,6 @@
                 "features": {},
                 "id": "fpvwrb",
                 "type": "node:gdpr-entity",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 510.2328403204409,
-                    "y": 192.00252018109728
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "l8g14s",
-                "type": "empty-node",
                 "children": []
             },
             {
@@ -460,78 +190,6 @@
                 "sourceId": "b08lj",
                 "targetId": "v12fl",
                 "text": "",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 525.8513598637854,
-                    "y": 199.45681359951175
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "d9062g",
-                "type": "empty-node",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 513.0725711465036,
-                    "y": 70.6040273669189
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "8w2086",
-                "type": "empty-node",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 547.859273765771,
-                    "y": 183.48332770290932
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "zt8m84",
-                "type": "empty-node",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 542.5347784669036,
-                    "y": 185.96809217571416
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "f4062",
-                "type": "empty-node",
                 "children": []
             },
             {
@@ -638,24 +296,6 @@
                 "sourceId": "38eku",
                 "targetId": "4aaxfl",
                 "text": "",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 589.3903370969373,
-                    "y": 82.67288337768517
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "2o3vxr",
-                "type": "empty-node",
                 "children": []
             },
             {
@@ -768,24 +408,6 @@
                 "sourceId": "lvt7l8",
                 "targetId": "rxm97q",
                 "text": "consentee",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 354.75757759351063,
-                    "y": 0.3206894218682308
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "bnymu",
-                "type": "empty-node",
                 "children": []
             },
             {
