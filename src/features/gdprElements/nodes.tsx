@@ -68,7 +68,7 @@ export class GdprNodeImpl extends DynamicChildrenNode implements WithEditableLab
     }
 
     private calculateWidth(): number {
-        return calculateTextSize(this.text).width + GdprNodeImpl.WIDTH_PADDING;
+        return calculateTextSize(this.editableLabel?.text).width + GdprNodeImpl.WIDTH_PADDING;
     }
 }
 
