@@ -3,14 +3,14 @@
         "canvasBounds": {
             "x": 0,
             "y": 0,
-            "width": 967,
-            "height": 971
+            "width": 985,
+            "height": 993
         },
         "scroll": {
-            "x": 17,
-            "y": -210.12021716649429
+            "x": 229.49587049739083,
+            "y": -99.0022948606672
         },
-        "zoom": 1.459622641509434,
+        "zoom": 2.047503166597612,
         "position": {
             "x": 0,
             "y": 0
@@ -97,317 +97,6 @@
                 "features": {},
                 "id": "ayqks8",
                 "type": "node:gdpr-entity",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 240,
-                    "y": 175
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "text": "Public Auth.",
-                "features": {},
-                "id": "gkhge",
-                "type": "node:gdpr-entity",
-                "children": []
-            },
-            {
-                "routingPoints": [
-                    {
-                        "x": 350,
-                        "y": 190
-                    }
-                ],
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "x856gc",
-                "type": "edge:gdpr-generalization",
-                "sourceId": "gkhge",
-                "targetId": "v12fl",
-                "text": "",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 191.5,
-                    "y": 215
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "text": "Purpose",
-                "features": {},
-                "id": "fpvwrb",
-                "type": "node:gdpr-entity",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 371.5,
-                    "y": 175
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "text": "Contract",
-                "features": {},
-                "id": "b08lj",
-                "type": "node:gdpr-entity",
-                "children": []
-            },
-            {
-                "routingPoints": [
-                    {
-                        "x": 350,
-                        "y": 190
-                    }
-                ],
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "l3raql",
-                "type": "edge:gdpr-generalization",
-                "sourceId": "b08lj",
-                "targetId": "v12fl",
-                "text": "",
-                "children": []
-            },
-            {
-                "routingPoints": [],
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "h52msf",
-                "type": "edge:gdpr-association",
-                "sourceId": "b08lj",
-                "targetId": "4aaxfl",
-                "text": "",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 443,
-                    "y": 100
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "text": "Third Party",
-                "features": {},
-                "id": "hmj64j",
-                "type": "node:gdpr-entity",
-                "children": []
-            },
-            {
-                "routingPoints": [
-                    {
-                        "x": 560,
-                        "y": 115
-                    }
-                ],
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "h7se86",
-                "type": "edge:gdpr-generalization",
-                "sourceId": "hmj64j",
-                "targetId": "4aaxfl",
-                "text": "",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 452,
-                    "y": 135
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "text": "Controller",
-                "features": {},
-                "id": "38eku",
-                "type": "node:gdpr-entity",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 539,
-                    "y": 175
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "text": "Role",
-                "features": {},
-                "id": "4aaxfl",
-                "type": "node:gdpr-entity",
-                "children": []
-            },
-            {
-                "routingPoints": [
-                    {
-                        "x": 560,
-                        "y": 150
-                    }
-                ],
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "om289",
-                "type": "edge:gdpr-generalization",
-                "sourceId": "38eku",
-                "targetId": "4aaxfl",
-                "text": "",
-                "children": []
-            },
-            {
-                "routingPoints": [],
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "50oso",
-                "type": "edge:gdpr-generalization",
-                "sourceId": "lvt7l8",
-                "targetId": "v12fl",
-                "text": "",
-                "children": []
-            },
-            {
-                "routingPoints": [],
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "1jht9a",
-                "type": "edge:gdpr-association",
-                "sourceId": "lvt7l8",
-                "targetId": "fpvwrb",
-                "text": "",
-                "children": []
-            },
-            {
-                "routingPoints": [],
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "iopo9t",
-                "type": "edge:gdpr-association",
-                "sourceId": "jnutij",
-                "targetId": "rxm97q",
-                "text": "references",
-                "children": []
-            },
-            {
-                "routingPoints": [],
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "mmsxo",
-                "type": "edge:gdpr-generalization",
-                "sourceId": "rxm97q",
-                "targetId": "4aaxfl",
-                "text": "",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 316.5,
-                    "y": 215
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "text": "Consent",
-                "features": {},
-                "id": "lvt7l8",
-                "type": "node:gdpr-entity",
-                "children": []
-            },
-            {
-                "position": {
-                    "x": 515.5,
-                    "y": 60
-                },
-                "size": {
-                    "width": -1,
-                    "height": -1
-                },
-                "strokeWidth": 0,
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "text": "Nat. Person",
-                "features": {},
-                "id": "rxm97q",
-                "type": "node:gdpr-entity",
-                "children": []
-            },
-            {
-                "routingPoints": [
-                    {
-                        "x": 635,
-                        "y": 230
-                    },
-                    {
-                        "x": 635,
-                        "y": 75
-                    }
-                ],
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "2kd35s",
-                "type": "edge:gdpr-association",
-                "sourceId": "lvt7l8",
-                "targetId": "rxm97q",
-                "text": "consentee",
                 "children": []
             },
             {
@@ -500,34 +189,13 @@
                 "selected": false,
                 "hoverFeedback": false,
                 "opacity": 1,
+                "multiplicity": "[0..*]",
                 "features": {},
                 "id": "eor1e",
                 "type": "edge:gdpr-association",
                 "sourceId": "75w1zl",
                 "targetId": "75w1zl",
                 "text": "following",
-                "children": []
-            },
-            {
-                "routingPoints": [
-                    {
-                        "x": 225.83171134797533,
-                        "y": 32.19392504193876
-                    },
-                    {
-                        "x": 225,
-                        "y": 165
-                    }
-                ],
-                "selected": false,
-                "hoverFeedback": false,
-                "opacity": 1,
-                "features": {},
-                "id": "owqto7",
-                "type": "edge:gdpr-association",
-                "sourceId": "75w1zl",
-                "targetId": "fpvwrb",
-                "text": "",
                 "children": []
             },
             {
@@ -544,21 +212,259 @@
                 "children": []
             },
             {
+                "position": {
+                    "x": 297.5,
+                    "y": 60
+                },
+                "size": {
+                    "width": -1,
+                    "height": -1
+                },
+                "strokeWidth": 0,
+                "selected": false,
+                "hoverFeedback": false,
+                "opacity": 1,
+                "text": "Personal Data",
+                "features": {},
+                "id": "jnutij",
+                "type": "node:gdpr-entity",
+                "children": []
+            },
+            {
+                "position": {
+                    "x": 191.5,
+                    "y": 225
+                },
+                "size": {
+                    "width": -1,
+                    "height": -1
+                },
+                "strokeWidth": 0,
+                "selected": false,
+                "hoverFeedback": false,
+                "opacity": 1,
+                "text": "Purpose",
+                "features": {},
+                "id": "fpvwrb",
+                "type": "node:gdpr-entity",
+                "children": []
+            },
+            {
                 "routingPoints": [
                     {
-                        "x": 285,
-                        "y": -5
+                        "x": 225.83171134797533,
+                        "y": 32.19392504193876
+                    },
+                    {
+                        "x": 225,
+                        "y": 165
+                    }
+                ],
+                "selected": false,
+                "hoverFeedback": false,
+                "opacity": 1,
+                "multiplicity": "[1..*]",
+                "features": {},
+                "id": "owqto7",
+                "type": "edge:gdpr-association",
+                "sourceId": "75w1zl",
+                "targetId": "fpvwrb",
+                "text": "",
+                "children": []
+            },
+            {
+                "routingPoints": [],
+                "selected": false,
+                "hoverFeedback": false,
+                "opacity": 1,
+                "multiplicity": "[1..*]",
+                "features": {},
+                "id": "1jht9a",
+                "type": "edge:gdpr-association",
+                "sourceId": "lvt7l8",
+                "targetId": "fpvwrb",
+                "text": "",
+                "children": []
+            },
+            {
+                "routingPoints": [],
+                "selected": false,
+                "hoverFeedback": false,
+                "opacity": 1,
+                "features": {},
+                "id": "50oso",
+                "type": "edge:gdpr-generalization",
+                "sourceId": "lvt7l8",
+                "targetId": "v12fl",
+                "text": "",
+                "children": []
+            },
+            {
+                "routingPoints": [],
+                "selected": false,
+                "hoverFeedback": false,
+                "opacity": 1,
+                "multiplicity": "[0..1]",
+                "features": {},
+                "id": "uzn6no",
+                "type": "edge:gdpr-association",
+                "sourceId": "v12fl",
+                "targetId": "jnutij",
+                "text": "defined data",
+                "children": []
+            },
+            {
+                "position": {
+                    "x": 240,
+                    "y": 185
+                },
+                "size": {
+                    "width": -1,
+                    "height": -1
+                },
+                "strokeWidth": 0,
+                "selected": false,
+                "hoverFeedback": false,
+                "opacity": 1,
+                "text": "Public Auth.",
+                "features": {},
+                "id": "gkhge",
+                "type": "node:gdpr-entity",
+                "children": []
+            },
+            {
+                "routingPoints": [
+                    {
+                        "x": 350,
+                        "y": 200
                     }
                 ],
                 "selected": false,
                 "hoverFeedback": false,
                 "opacity": 1,
                 "features": {},
+                "id": "x856gc",
+                "type": "edge:gdpr-generalization",
+                "sourceId": "gkhge",
+                "targetId": "v12fl",
+                "text": "",
+                "children": []
+            },
+            {
+                "position": {
+                    "x": 371.5,
+                    "y": 185
+                },
+                "size": {
+                    "width": -1,
+                    "height": -1
+                },
+                "strokeWidth": 0,
+                "selected": false,
+                "hoverFeedback": false,
+                "opacity": 1,
+                "text": "Contract",
+                "features": {},
+                "id": "b08lj",
+                "type": "node:gdpr-entity",
+                "children": []
+            },
+            {
+                "routingPoints": [
+                    {
+                        "x": 350,
+                        "y": 200
+                    }
+                ],
+                "selected": false,
+                "hoverFeedback": false,
+                "opacity": 1,
+                "features": {},
+                "id": "l3raql",
+                "type": "edge:gdpr-generalization",
+                "sourceId": "b08lj",
+                "targetId": "v12fl",
+                "text": "",
+                "children": []
+            },
+            {
+                "position": {
+                    "x": 306,
+                    "y": 145
+                },
+                "size": {
+                    "width": -1,
+                    "height": -1
+                },
+                "strokeWidth": 0,
+                "selected": false,
+                "hoverFeedback": false,
+                "opacity": 1,
+                "text": "Legal Basis",
+                "features": {},
+                "id": "v12fl",
+                "type": "node:gdpr-entity",
+                "children": []
+            },
+            {
+                "routingPoints": [
+                    {
+                        "x": 245.34134565256664,
+                        "y": 31.16459786822208
+                    },
+                    {
+                        "x": 245,
+                        "y": 160
+                    }
+                ],
+                "selected": false,
+                "hoverFeedback": false,
+                "opacity": 1,
+                "multiplicity": "[1..*]",
+                "features": {},
+                "id": "l2n4ia",
+                "type": "edge:gdpr-association",
+                "sourceId": "75w1zl",
+                "targetId": "v12fl",
+                "text": "on basis of",
+                "children": []
+            },
+            {
+                "routingPoints": [
+                    {
+                        "x": 280,
+                        "y": -15
+                    }
+                ],
+                "selected": false,
+                "hoverFeedback": false,
+                "opacity": 1,
+                "multiplicity": "[0..*]",
+                "features": {},
                 "id": "gl9ogh",
                 "type": "edge:gdpr-association",
                 "sourceId": "75w1zl",
                 "targetId": "v9f7b",
                 "text": "in",
+                "children": []
+            },
+            {
+                "position": {
+                    "x": 167.5,
+                    "y": 0
+                },
+                "size": {
+                    "width": -1,
+                    "height": -1
+                },
+                "strokeWidth": 0,
+                "selected": false,
+                "hoverFeedback": false,
+                "opacity": 1,
+                "text": "Processing",
+                "features": {},
+                "id": "75w1zl",
+                "type": "node:gdpr-entity",
                 "children": []
             },
             {
@@ -583,13 +489,14 @@
             {
                 "routingPoints": [
                     {
-                        "x": 285,
-                        "y": 30
+                        "x": 280,
+                        "y": 45
                     }
                 ],
                 "selected": false,
                 "hoverFeedback": false,
                 "opacity": 1,
+                "multiplicity": "[0..*]",
                 "features": {},
                 "id": "zdo93",
                 "type": "edge:gdpr-association",
@@ -599,9 +506,50 @@
                 "children": []
             },
             {
+                "routingPoints": [],
+                "selected": false,
+                "hoverFeedback": false,
+                "opacity": 1,
+                "multiplicity": "[1..*]",
+                "features": {},
+                "id": "iopo9t",
+                "type": "edge:gdpr-association",
+                "sourceId": "jnutij",
+                "targetId": "rxm97q",
+                "text": "references",
+                "children": []
+            },
+            {
+                "routingPoints": [],
+                "selected": false,
+                "hoverFeedback": false,
+                "opacity": 1,
+                "multiplicity": "[2..*]",
+                "features": {},
+                "id": "h52msf",
+                "type": "edge:gdpr-association",
+                "sourceId": "b08lj",
+                "targetId": "4aaxfl",
+                "text": "",
+                "children": []
+            },
+            {
+                "routingPoints": [],
+                "selected": false,
+                "hoverFeedback": false,
+                "opacity": 1,
+                "features": {},
+                "id": "mmsxo",
+                "type": "edge:gdpr-generalization",
+                "sourceId": "rxm97q",
+                "targetId": "4aaxfl",
+                "text": "",
+                "children": []
+            },
+            {
                 "position": {
-                    "x": 167.5,
-                    "y": 0
+                    "x": 443,
+                    "y": 100
                 },
                 "size": {
                     "width": -1,
@@ -611,37 +559,33 @@
                 "selected": false,
                 "hoverFeedback": false,
                 "opacity": 1,
-                "text": "Processing",
+                "text": "Third Party",
                 "features": {},
-                "id": "75w1zl",
+                "id": "hmj64j",
                 "type": "node:gdpr-entity",
                 "children": []
             },
             {
                 "routingPoints": [
                     {
-                        "x": 245.34134565256664,
-                        "y": 31.16459786822208
-                    },
-                    {
-                        "x": 245,
-                        "y": 150
+                        "x": 580,
+                        "y": 115
                     }
                 ],
                 "selected": false,
                 "hoverFeedback": false,
                 "opacity": 1,
                 "features": {},
-                "id": "l2n4ia",
-                "type": "edge:gdpr-association",
-                "sourceId": "75w1zl",
-                "targetId": "v12fl",
-                "text": "on basis of",
+                "id": "h7se86",
+                "type": "edge:gdpr-generalization",
+                "sourceId": "hmj64j",
+                "targetId": "4aaxfl",
+                "text": "",
                 "children": []
             },
             {
                 "position": {
-                    "x": 306,
+                    "x": 452,
                     "y": 135
                 },
                 "size": {
@@ -652,15 +596,71 @@
                 "selected": false,
                 "hoverFeedback": false,
                 "opacity": 1,
-                "text": "Legal Basis",
+                "text": "Controller",
                 "features": {},
-                "id": "v12fl",
+                "id": "38eku",
                 "type": "node:gdpr-entity",
                 "children": []
             },
             {
                 "position": {
-                    "x": 297.5,
+                    "x": 559,
+                    "y": 185
+                },
+                "size": {
+                    "width": -1,
+                    "height": -1
+                },
+                "strokeWidth": 0,
+                "selected": false,
+                "hoverFeedback": false,
+                "opacity": 1,
+                "text": "Role",
+                "features": {},
+                "id": "4aaxfl",
+                "type": "node:gdpr-entity",
+                "children": []
+            },
+            {
+                "routingPoints": [
+                    {
+                        "x": 580,
+                        "y": 150
+                    }
+                ],
+                "selected": false,
+                "hoverFeedback": false,
+                "opacity": 1,
+                "features": {},
+                "id": "om289",
+                "type": "edge:gdpr-generalization",
+                "sourceId": "38eku",
+                "targetId": "4aaxfl",
+                "text": "",
+                "children": []
+            },
+            {
+                "position": {
+                    "x": 316.5,
+                    "y": 225
+                },
+                "size": {
+                    "width": -1,
+                    "height": -1
+                },
+                "strokeWidth": 0,
+                "selected": false,
+                "hoverFeedback": false,
+                "opacity": 1,
+                "text": "Consent",
+                "features": {},
+                "id": "lvt7l8",
+                "type": "node:gdpr-entity",
+                "children": []
+            },
+            {
+                "position": {
+                    "x": 535.5,
                     "y": 60
                 },
                 "size": {
@@ -671,23 +671,33 @@
                 "selected": false,
                 "hoverFeedback": false,
                 "opacity": 1,
-                "text": "Personal Data",
+                "text": "Nat. Person",
                 "features": {},
-                "id": "jnutij",
+                "id": "rxm97q",
                 "type": "node:gdpr-entity",
                 "children": []
             },
             {
-                "routingPoints": [],
+                "routingPoints": [
+                    {
+                        "x": 650,
+                        "y": 240
+                    },
+                    {
+                        "x": 650,
+                        "y": 75
+                    }
+                ],
                 "selected": true,
                 "hoverFeedback": false,
                 "opacity": 1,
+                "multiplicity": "[1..1]",
                 "features": {},
-                "id": "uzn6no",
+                "id": "2kd35s",
                 "type": "edge:gdpr-association",
-                "sourceId": "v12fl",
-                "targetId": "jnutij",
-                "text": "defined data",
+                "sourceId": "lvt7l8",
+                "targetId": "rxm97q",
+                "text": "consentee",
                 "children": []
             }
         ]

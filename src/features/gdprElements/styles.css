@@ -2,3 +2,8 @@
     fill: var(--color-background);
     stroke: var(--color-foreground);
 }
+
+.sprotty-edge .multiplicity {
+    fill: var(--color-foreground);
+    font-size: 7pt;
+}
