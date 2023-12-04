@@ -34,4 +34,4 @@ npm run build
 
 This will create a `dist` folder containing the built static assets. The contents of this folder can be uploaded to a web server to host the project.
 
-This project is built using GitHub Actions and the current built version is hosted on GitHub Pages that can be found [here](https://model-based-data-protection-assesments.github.io/GDPR-Editor/).
+This project is built using GitHub Actions and the current built version is hosted on GitHub Pages that can be found [here](https://model-based-data-protection-assessments.github.io/GDPR-Editor/).
