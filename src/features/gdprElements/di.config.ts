@@ -1,7 +1,8 @@
 import { ContainerModule } from "inversify";
-import { TYPES, configureModelElement, withEditLabelFeature } from "sprotty";
+import { TYPES, configureCommand, configureModelElement, withEditLabelFeature } from "sprotty";
 import { GdprNodeImpl, GdprNodeView } from "./nodes";
 import { GdprEdgeAssociationView, GdprEdgeGeneralizationView, GdprEdgeImpl } from "./edges";
+import { EdgeMultiplicityEditUI, SetEdgeMultiplicityCommand } from "./edgeMultiplicityEditUI";
 
 import "./styles.css";
 
@@ -11,6 +12,9 @@ export const gdprElementsModule = new ContainerModule((bind, unbind, isBound, re
     unbind(TYPES.IEditLabelValidator);
 
     const context = { bind, unbind, isBound, rebind };
+    bind(EdgeMultiplicityEditUI).toSelf().inSingletonScope();
+    bind(TYPES.IUIExtension).toService(EdgeMultiplicityEditUI);
+    configureCommand(context, SetEdgeMultiplicityCommand);
 
     configureModelElement(context, "node:gdpr-entity", GdprNodeImpl, GdprNodeView);
     configureModelElement(context, "edge:gdpr-association", GdprEdgeImpl, GdprEdgeAssociationView, {
