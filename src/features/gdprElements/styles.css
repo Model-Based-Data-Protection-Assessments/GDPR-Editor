@@ -1,9 +1,10 @@
-.sprotty-edge .arrow-generalization {
-    fill: var(--color-background);
-    stroke: var(--color-foreground);
+.sprotty-node .gdpr-type {
+    font-size: 6pt;
 }
 
-.sprotty-edge .multiplicity {
-    fill: var(--color-foreground);
-    font-size: 7pt;
+.sprotty-node.gdpr-type-missing rect {
+    stroke: var(--color-error);
+}
+.sprotty-node.gdpr-type-missing text {
+    fill: var(--color-error);
 }

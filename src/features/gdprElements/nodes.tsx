@@ -7,6 +7,7 @@ import {
     WithEditableLabel,
     isEditableLabel,
     withEditLabelFeature,
+    SRoutableElementImpl,
 } from "sprotty";
 import { Bounds, SLabel, SNode } from "sprotty-protocol";
 import { injectable } from "inversify";
@@ -21,10 +22,11 @@ export interface GdprNode extends SNode {
 
 export class GdprNodeImpl extends DynamicChildrenNode implements WithEditableLabel {
     static readonly DEFAULT_FEATURES = [...SNodeImpl.DEFAULT_FEATURES, withEditLabelFeature];
-    static readonly DEFAULT_WIDTH = 50;
-    static readonly WIDTH_PADDING = 12;
-    static readonly HEIGHT = 30;
     private static readonly LABEL_TYPE = "label:positional";
+
+    protected defaultWidth = 80;
+    protected nodeHeight = 30;
+    protected nodeWidthPadding = 12;
 
     text?: string;
 
@@ -63,18 +65,54 @@ export class GdprNodeImpl extends DynamicChildrenNode implements WithEditableLab
             x: this.position.x,
             y: this.position.y,
             width: this.calculateWidth(),
-            height: GdprNodeImpl.HEIGHT,
+            height: this.nodeHeight,
         };
     }
 
-    private calculateWidth(): number {
-        return calculateTextSize(this.editableLabel?.text).width + GdprNodeImpl.WIDTH_PADDING;
+    protected calculateWidth(): number {
+        if (!this.editableLabel?.text) {
+            return this.defaultWidth;
+        }
+        return calculateTextSize(this.editableLabel?.text).width + this.nodeWidthPadding;
+    }
+}
+
+const gdprProcessingTypes = ["Collecting", "Storing", "Sharing", "Deleting"] as const;
+type GdprProcessingType = (typeof gdprProcessingTypes)[number];
+
+export interface GdprProcessingNode extends GdprNode {
+    processingType: GdprProcessingType | undefined;
+}
+
+export class GdprProcessingNodeImpl extends GdprNodeImpl {
+    processingType: GdprProcessingType | undefined;
+
+    protected nodeHeight = 40;
+
+    canConnect(_routable: SRoutableElementImpl, _role: string): boolean {
+        if (this.processingType === undefined) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public getTypeText(): string {
+        const pocessingType = this.processingType ?? "No Type specified";
+        return `<<Processing | ${pocessingType}>>`;
+    }
+
+    protected calculateWidth(): number {
+        const superWidth = super.calculateWidth();
+        const typeTextWidth = calculateTextSize(this.getTypeText(), "6pt sans-serif").width + this.nodeWidthPadding;
+
+        return Math.max(superWidth, typeTextWidth);
     }
 }
 
 @injectable()
-export class GdprNodeView extends ShapeView {
-    render(node: Readonly<GdprNodeImpl>, context: RenderingContext): VNode | undefined {
+export class GdprProcessingNodeView extends ShapeView {
+    render(node: Readonly<GdprProcessingNodeImpl>, context: RenderingContext): VNode | undefined {
         if (!this.isVisible(node, context)) {
             return undefined;
         }
@@ -82,11 +120,20 @@ export class GdprNodeView extends ShapeView {
         const { width, height } = node.bounds;
 
         return (
-            <g class-sprotty-node={true} class-gdpr={true} style={{ opacity: node.opacity.toString() }}>
+            <g
+                class-sprotty-node={true}
+                class-gdpr={true}
+                class-gdpr-type-missing={node.processingType === undefined}
+                style={{ opacity: node.opacity.toString() }}
+            >
                 <rect x="0" y="0" width={width} height={height} />
+                <text x={width / 2} y="8" class-gdpr-type={true}>
+                    {node.getTypeText()}
+                </text>
+
                 {context.renderChildren(node, {
                     xPosition: width / 2,
-                    yPosition: height / 2,
+                    yPosition: height / 2 + 4,
                 } as DfdPositionalLabelArgs)}
             </g>
         );

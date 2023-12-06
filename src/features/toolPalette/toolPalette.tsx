@@ -68,12 +68,12 @@ export class ToolPaletteUI extends AbstractUIExtension implements IActionHandler
         this.addTool(
             containerElement,
             this.nodeCreationTool,
-            "GDPR node",
-            (tool) => tool.enable("node:gdpr-entity"),
+            "Processing Node",
+            (tool) => tool.enable("node:gdpr-processing"),
             <g>
                 <rect x="10%" y="20%" width="80%" height="60%" stroke-width="1" />
                 <text x="50%" y="50%">
-                    Node
+                    Pci
                 </text>
             </g>,
             "KeyN",
@@ -82,25 +82,13 @@ export class ToolPaletteUI extends AbstractUIExtension implements IActionHandler
         this.addTool(
             containerElement,
             this.edgeCreationTool,
-            "Edge (Association)",
-            (tool) => tool.enable("edge:gdpr-association"),
+            "Edge",
+            (tool) => tool.enable("edge:gdpr"),
             <g>
                 <path d="M 4,4 L 28,28" attrs-stroke-width="2" />
                 <path d="M -3,3 L 6,6 L 3,-3" transform="translate(22,22)" attrs-stroke-width="2" />
             </g>,
             "KeyA",
-        );
-
-        this.addTool(
-            containerElement,
-            this.edgeCreationTool,
-            "Edge (Generalization)",
-            (tool) => tool.enable("edge:gdpr-generalization"),
-            <g>
-                <path d="M 4,4 L 22,22" attrs-stroke-width="2" />
-                <path d="M 0,0 L -3,3 L 6,6 L 3,-3 Z" transform="translate(22,22)" attrs-stroke-width="2" />
-            </g>,
-            "KeyG",
         );
 
         containerElement.classList.add("tool-palette");

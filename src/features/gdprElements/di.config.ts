@@ -1,9 +1,9 @@
 import { ContainerModule } from "inversify";
 import { TYPES, configureModelElement, withEditLabelFeature } from "sprotty";
-import { GdprNodeImpl, GdprNodeView } from "./nodes";
-import { GdprEdgeAssociationView, GdprEdgeGeneralizationView, GdprEdgeImpl } from "./edges";
 
 import "./styles.css";
+import { GdprProcessingNodeImpl, GdprProcessingNodeView } from "./nodes";
+import { GdprEdgeImpl, GdprEdgeView } from "./edges";
 
 export const gdprElementsModule = new ContainerModule((bind, unbind, isBound, rebind) => {
     // DFD label validations that limit the label values for edges are not wanted for GDPR
@@ -12,11 +12,8 @@ export const gdprElementsModule = new ContainerModule((bind, unbind, isBound, re
 
     const context = { bind, unbind, isBound, rebind };
 
-    configureModelElement(context, "node:gdpr-entity", GdprNodeImpl, GdprNodeView);
-    configureModelElement(context, "edge:gdpr-association", GdprEdgeImpl, GdprEdgeAssociationView, {
-        enable: [withEditLabelFeature],
-    });
-    configureModelElement(context, "edge:gdpr-generalization", GdprEdgeImpl, GdprEdgeGeneralizationView, {
+    configureModelElement(context, "node:gdpr-processing", GdprProcessingNodeImpl, GdprProcessingNodeView);
+    configureModelElement(context, "edge:gdpr", GdprEdgeImpl, GdprEdgeView, {
         enable: [withEditLabelFeature],
     });
 });
