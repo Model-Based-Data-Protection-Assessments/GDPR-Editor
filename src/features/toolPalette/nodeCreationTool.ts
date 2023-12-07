@@ -12,7 +12,7 @@ import { CreationTool } from "./creationTool";
 @injectable()
 export class NodeCreationTool extends CreationTool<SNode, SNodeImpl> {
     createElementSchema(): SNode {
-        const defaultText = this.elementType.replace("node:", "");
+        const defaultText = this.elementType.replace("node:", "").replace("gdpr-", "");
         const defaultTextCapitalized = defaultText.charAt(0).toUpperCase() + defaultText.slice(1);
 
         return {

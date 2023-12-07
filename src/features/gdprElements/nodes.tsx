@@ -25,7 +25,7 @@ export class GdprNodeImpl extends DynamicChildrenNode implements WithEditableLab
     private static readonly LABEL_TYPE = "label:positional";
 
     protected defaultWidth = 80;
-    protected nodeHeight = 30;
+    protected nodeHeight = 40;
     protected nodeWidthPadding = 12;
 
     text?: string;
@@ -77,32 +77,22 @@ export class GdprNodeImpl extends DynamicChildrenNode implements WithEditableLab
     }
 }
 
-const gdprProcessingTypes = ["Collecting", "Storing", "Sharing", "Deleting"] as const;
-type GdprProcessingType = (typeof gdprProcessingTypes)[number];
-
-export interface GdprProcessingNode extends GdprNode {
-    processingType: GdprProcessingType | undefined;
+export interface GdprSubTypeNode<T extends string> extends GdprNode {
+    subType: T | undefined;
 }
 
-export class GdprProcessingNodeImpl extends GdprNodeImpl {
-    processingType: GdprProcessingType | undefined;
+export abstract class GdprSubTypeNodeImpl<T extends string> extends GdprNodeImpl {
+    subType: T | undefined;
 
-    protected nodeHeight = 40;
-
-    canConnect(_routable: SRoutableElementImpl, _role: string): boolean {
-        if (this.processingType === undefined) {
-            return false;
-        }
-
-        return true;
-    }
+    protected abstract getBaseTypeText(): string;
 
     public getTypeText(): string {
-        const pocessingType = this.processingType ?? "No Type specified";
-        return `<<Processing | ${pocessingType}>>`;
+        const baseType = this.getBaseTypeText();
+        const subType = this.subType ?? "No Type specified";
+        return `<<${baseType} | ${subType}>>`;
     }
 
-    protected calculateWidth(): number {
+    protected override calculateWidth(): number {
         const superWidth = super.calculateWidth();
         const typeTextWidth = calculateTextSize(this.getTypeText(), "6pt sans-serif").width + this.nodeWidthPadding;
 
@@ -111,8 +101,8 @@ export class GdprProcessingNodeImpl extends GdprNodeImpl {
 }
 
 @injectable()
-export class GdprProcessingNodeView extends ShapeView {
-    render(node: Readonly<GdprProcessingNodeImpl>, context: RenderingContext): VNode | undefined {
+export class GdprSubTypeNodeView extends ShapeView {
+    render(node: Readonly<GdprSubTypeNodeImpl<string>>, context: RenderingContext): VNode | undefined {
         if (!this.isVisible(node, context)) {
             return undefined;
         }
@@ -123,7 +113,7 @@ export class GdprProcessingNodeView extends ShapeView {
             <g
                 class-sprotty-node={true}
                 class-gdpr={true}
-                class-gdpr-type-missing={node.processingType === undefined}
+                class-gdpr-type-missing={node.subType === undefined}
                 style={{ opacity: node.opacity.toString() }}
             >
                 <rect x="0" y="0" width={width} height={height} />
@@ -137,5 +127,62 @@ export class GdprProcessingNodeView extends ShapeView {
                 } as DfdPositionalLabelArgs)}
             </g>
         );
+    }
+}
+
+const gdprProcessingTypes = ["Collecting", "Storing", "Sharing", "Deleting"] as const;
+type GdprProcessingType = (typeof gdprProcessingTypes)[number];
+
+export interface GdprProcessingNode extends GdprSubTypeNode<GdprProcessingType> {}
+
+export class GdprProcessingNodeImpl extends GdprSubTypeNodeImpl<GdprProcessingType> {
+    protected override getBaseTypeText(): string {
+        return "Processing";
+    }
+
+    canConnect(_routable: SRoutableElementImpl, _role: string): boolean {
+        if (this.subType === undefined) {
+            return false;
+        }
+
+        return true;
+    }
+}
+
+const gdprLegalBasisTypes = ["Public Authority", "Consent", "Contract"];
+type GdprLegalBasisType = (typeof gdprLegalBasisTypes)[number];
+
+export interface GdprLegalBasisNode extends GdprSubTypeNode<GdprLegalBasisType> {}
+
+export class GdprLegalBasisNodeImpl extends GdprSubTypeNodeImpl<GdprLegalBasisType> {
+    protected override getBaseTypeText(): string {
+        return "Legal Basis";
+    }
+
+    canConnect(_routable: SRoutableElementImpl, _role: string): boolean {
+        if (this.subType === undefined) {
+            return false;
+        }
+
+        return true;
+    }
+}
+
+const gdprRoleTypes = ["Natural Person", "Third Party", "Controller"];
+type GdprRoleType = (typeof gdprRoleTypes)[number];
+
+export interface GdprRoleNode extends GdprSubTypeNode<GdprRoleType> {}
+
+export class GdprRoleNodeImpl extends GdprSubTypeNodeImpl<GdprRoleType> {
+    protected override getBaseTypeText(): string {
+        return "Role";
+    }
+
+    canConnect(_routable: SRoutableElementImpl, _role: string): boolean {
+        if (this.subType === undefined) {
+            return false;
+        }
+
+        return true;
     }
 }

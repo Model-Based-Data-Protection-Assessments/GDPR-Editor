@@ -73,10 +73,38 @@ export class ToolPaletteUI extends AbstractUIExtension implements IActionHandler
             <g>
                 <rect x="10%" y="20%" width="80%" height="60%" stroke-width="1" />
                 <text x="50%" y="50%">
-                    Pci
+                    Png
                 </text>
             </g>,
-            "KeyN",
+            "KeyP",
+        );
+
+        this.addTool(
+            containerElement,
+            this.nodeCreationTool,
+            "Legal Basis Node",
+            (tool) => tool.enable("node:gdpr-legalbasis"),
+            <g>
+                <rect x="10%" y="20%" width="80%" height="60%" stroke-width="1" />
+                <text x="50%" y="50%">
+                    LgB
+                </text>
+            </g>,
+            "KeyL",
+        );
+
+        this.addTool(
+            containerElement,
+            this.nodeCreationTool,
+            "Role Node",
+            (tool) => tool.enable("node:gdpr-role"),
+            <g>
+                <rect x="10%" y="20%" width="80%" height="60%" stroke-width="1" />
+                <text x="50%" y="50%">
+                    Rol
+                </text>
+            </g>,
+            "KeyR",
         );
 
         this.addTool(
@@ -88,7 +116,7 @@ export class ToolPaletteUI extends AbstractUIExtension implements IActionHandler
                 <path d="M 4,4 L 28,28" attrs-stroke-width="2" />
                 <path d="M -3,3 L 6,6 L 3,-3" transform="translate(22,22)" attrs-stroke-width="2" />
             </g>,
-            "KeyA",
+            "KeyE",
         );
 
         containerElement.classList.add("tool-palette");
