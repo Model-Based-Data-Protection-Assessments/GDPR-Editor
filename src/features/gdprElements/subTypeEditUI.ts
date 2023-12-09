@@ -17,6 +17,8 @@ import { GdprSubTypeNodeImpl } from "./nodes";
 import { inject, injectable } from "inversify";
 import { DOMHelper } from "sprotty/lib/base/views/dom-helper";
 
+import "./subTypeEditUI.css";
+
 export class GdprSubTypeEditUIMouseListener extends MouseListener {
     private uiOpen: boolean = false;
 
@@ -67,6 +69,7 @@ export class GdprSubTypeEditUI extends AbstractUIExtension {
 
     private node: GdprSubTypeNodeImpl<string> | undefined;
     private subTypeSelect = document.createElement("select") as HTMLSelectElement;
+    private errorParagraph = document.createElement("span") as HTMLSpanElement;
 
     id(): string {
         return GdprSubTypeEditUI.ID;
@@ -83,15 +86,22 @@ export class GdprSubTypeEditUI extends AbstractUIExtension {
     }
 
     protected initializeContents(containerElement: HTMLElement): void {
-        // Disables the context menu for the select input.
+        // Disables the context menu for the select input and error message.
         // When right clicking a node and the cursor is where the select input will be shown,
         // the right click is carried through to the select input which would open the context menu
         // from the browser. We don't want that, and the click should just be ignored.
         this.subTypeSelect.oncontextmenu = (event) => event.preventDefault();
+        this.errorParagraph.oncontextmenu = (event) => event.preventDefault();
+
         this.subTypeSelect.onchange = () => this.saveAndHide();
 
         containerElement.appendChild(this.subTypeSelect);
+        containerElement.appendChild(document.createElement("br"));
+        containerElement.appendChild(this.errorParagraph);
+
         containerElement.classList.add("ui-float");
+        this.subTypeSelect.classList.add("gdpr-subtype-edit-select");
+        this.errorParagraph.classList.add("gdpr-subtype-edit-error");
     }
 
     protected onBeforeShow(
@@ -122,6 +132,17 @@ export class GdprSubTypeEditUI extends AbstractUIExtension {
 
         // Expand select to show all options without the need to open the dropdown
         this.subTypeSelect.size = this.subTypeSelect.options.length;
+
+        // Check whether editing is allowed and show error message if not
+        const canChangeSubType = this.node.canChangeSubType();
+        if (canChangeSubType !== true) {
+            this.subTypeSelect.disabled = true;
+            this.errorParagraph.innerText = canChangeSubType;
+            this.errorParagraph.style.display = "block";
+        } else {
+            this.subTypeSelect.disabled = false;
+            this.errorParagraph.style.display = "none";
+        }
     }
 
     private saveAndHide(): void {
@@ -173,6 +194,10 @@ export class SetGdprSubTypeCommand extends Command {
         // First term is to check whether a value was provided. Not providing anything (undefined) is always valid.
         if (this.action.subType && !node.getPossibleSubTypes().includes(this.action.subType)) {
             throw new Error(`Sub type ${this.action.subType} is not a valid sub type for node ${this.action.nodeId}`);
+        }
+
+        if (this.node.canChangeSubType() !== true) {
+            throw new Error(`Cannot change sub type of node ${this.action.nodeId}: ${this.node.canChangeSubType()}`);
         }
 
         this.previousSubType = node.subType;

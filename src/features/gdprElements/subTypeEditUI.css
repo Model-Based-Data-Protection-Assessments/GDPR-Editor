@@ -1,0 +1,20 @@
+.gdpr-subtype-edit-select:disabled * {
+    filter: opacity(0.5);
+}
+
+.gdpr-subtype-edit-error {
+    margin: 6px;
+}
+
+.gdpr-subtype-edit-error::before {
+    content: "";
+    background-image: url("@fortawesome/fontawesome-free/svgs/solid/triangle-exclamation.svg");
+    display: inline-block;
+    filter: invert(var(--dark-mode));
+    height: 16px;
+    width: 16px;
+    background-size: 16px 16px;
+    vertical-align: text-top;
+
+    margin-right: 4px;
+}

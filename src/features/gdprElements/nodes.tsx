@@ -84,8 +84,6 @@ export interface GdprSubTypeNode<T extends string> extends GdprNode {
 export abstract class GdprSubTypeNodeImpl<T extends string> extends GdprNodeImpl {
     subType: T | undefined;
 
-    protected abstract getBaseTypeText(): string;
-
     public abstract getPossibleSubTypes(): T[];
 
     public getTypeText(): string {
@@ -93,6 +91,27 @@ export abstract class GdprSubTypeNodeImpl<T extends string> extends GdprNodeImpl
         const subType = this.subType ?? "No Type specified";
         return `<<${baseType} | ${subType}>>`;
     }
+
+    public canChangeSubType(): string | true {
+        if (!this.subType) {
+            // When no sub type is set, we can always change it
+            return true;
+        }
+
+        // When a sub type is set, we can only change it if there are no edges
+        // connected to this node.
+        let edgeCount = 0;
+        this.incomingEdges.forEach((_edge) => edgeCount++);
+        this.outgoingEdges.forEach((_edge) => edgeCount++);
+
+        if (edgeCount > 0) {
+            return "Node Sub Type is not changeable because the node has edges connected to it.";
+        } else {
+            return true;
+        }
+    }
+
+    protected abstract getBaseTypeText(): string;
 
     protected override calculateWidth(): number {
         const superWidth = super.calculateWidth();
