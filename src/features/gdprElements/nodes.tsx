@@ -86,6 +86,8 @@ export abstract class GdprSubTypeNodeImpl<T extends string> extends GdprNodeImpl
 
     protected abstract getBaseTypeText(): string;
 
+    public abstract getPossibleSubTypes(): T[];
+
     public getTypeText(): string {
         const baseType = this.getBaseTypeText();
         const subType = this.subType ?? "No Type specified";
@@ -130,7 +132,7 @@ export class GdprSubTypeNodeView extends ShapeView {
     }
 }
 
-const gdprProcessingTypes = ["Collecting", "Storing", "Sharing", "Deleting"] as const;
+const gdprProcessingTypes = ["Collecting", "Usage", "Transferring", "Storage"] as const;
 type GdprProcessingType = (typeof gdprProcessingTypes)[number];
 
 export interface GdprProcessingNode extends GdprSubTypeNode<GdprProcessingType> {}
@@ -138,6 +140,10 @@ export interface GdprProcessingNode extends GdprSubTypeNode<GdprProcessingType> 
 export class GdprProcessingNodeImpl extends GdprSubTypeNodeImpl<GdprProcessingType> {
     protected override getBaseTypeText(): string {
         return "Processing";
+    }
+
+    public override getPossibleSubTypes(): GdprProcessingType[] {
+        return [...gdprProcessingTypes];
     }
 
     canConnect(_routable: SRoutableElementImpl, _role: string): boolean {
@@ -159,6 +165,10 @@ export class GdprLegalBasisNodeImpl extends GdprSubTypeNodeImpl<GdprLegalBasisTy
         return "Legal Basis";
     }
 
+    public override getPossibleSubTypes(): GdprLegalBasisType[] {
+        return [...gdprLegalBasisTypes];
+    }
+
     canConnect(_routable: SRoutableElementImpl, _role: string): boolean {
         if (this.subType === undefined) {
             return false;
@@ -176,6 +186,10 @@ export interface GdprRoleNode extends GdprSubTypeNode<GdprRoleType> {}
 export class GdprRoleNodeImpl extends GdprSubTypeNodeImpl<GdprRoleType> {
     protected override getBaseTypeText(): string {
         return "Role";
+    }
+
+    public override getPossibleSubTypes(): GdprRoleType[] {
+        return [...gdprRoleTypes];
     }
 
     canConnect(_routable: SRoutableElementImpl, _role: string): boolean {
