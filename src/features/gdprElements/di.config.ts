@@ -1,6 +1,12 @@
 import { ContainerModule } from "inversify";
 import { TYPES, configureCommand, configureModelElement, withEditLabelFeature } from "sprotty";
-import { GdprLegalBasisNodeImpl, GdprProcessingNodeImpl, GdprRoleNodeImpl, GdprSubTypeNodeView } from "./nodes";
+import {
+    GdprDataNodeImpl,
+    GdprLegalBasisNodeImpl,
+    GdprProcessingNodeImpl,
+    GdprRoleNodeImpl,
+    GdprSubTypeNodeView,
+} from "./nodes";
 import { GdprEdgeImpl, GdprEdgeView } from "./edges";
 import { GdprSubTypeEditUI, GdprSubTypeEditUIMouseListener, SetGdprSubTypeCommand } from "./subTypeEditUI";
 
@@ -20,6 +26,7 @@ export const gdprElementsModule = new ContainerModule((bind, unbind, isBound, re
     configureModelElement(context, "node:gdpr-processing", GdprProcessingNodeImpl, GdprSubTypeNodeView);
     configureModelElement(context, "node:gdpr-legalbasis", GdprLegalBasisNodeImpl, GdprSubTypeNodeView);
     configureModelElement(context, "node:gdpr-role", GdprRoleNodeImpl, GdprSubTypeNodeView);
+    configureModelElement(context, "node:gdpr-data", GdprDataNodeImpl, GdprSubTypeNodeView);
 
     configureModelElement(context, "edge:gdpr", GdprEdgeImpl, GdprEdgeView, {
         enable: [withEditLabelFeature],

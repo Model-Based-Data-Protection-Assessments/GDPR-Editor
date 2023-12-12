@@ -219,3 +219,26 @@ export class GdprRoleNodeImpl extends GdprSubTypeNodeImpl<GdprRoleType> {
         return true;
     }
 }
+
+const gdprDataTypes = ["Personal Data"];
+type GdprDataType = (typeof gdprDataTypes)[number];
+
+export interface GdprDataNode extends GdprSubTypeNode<GdprDataType> {}
+
+export class GdprDataNodeImpl extends GdprSubTypeNodeImpl<GdprDataType> {
+    public override getBaseTypeText(): string {
+        return "Data";
+    }
+
+    public override getPossibleSubTypes(): GdprDataType[] {
+        return [...gdprDataTypes];
+    }
+
+    canConnect(_routable: SRoutableElementImpl, _role: string): boolean {
+        if (this.subType === undefined) {
+            return false;
+        }
+
+        return true;
+    }
+}
