@@ -125,7 +125,7 @@ export class GdprSubTypeEditUI extends AbstractUIExtension {
         // Fill the select box with options based on the node
         // Delete all options, yes this is the simplest way to clear a js array when it is readonly. Yes this really works
         this.subTypeSelect.options.length = 0;
-        this.subTypeSelect.options.add(new Option("None | Select a sub type", ""));
+        this.subTypeSelect.options.add(new Option("None", ""));
         this.node.getPossibleSubTypes().forEach((subType) => {
             this.subTypeSelect.options.add(new Option(subType, subType));
         });
@@ -182,6 +182,7 @@ export class SetGdprSubTypeCommand extends Command {
 
     private node: GdprSubTypeNodeImpl<string> | undefined;
     private previousSubType: string | undefined;
+    private previousText: string | undefined;
 
     execute(context: CommandExecutionContext): CommandReturn {
         const node = context.root.index.getById(this.action.nodeId);
@@ -203,12 +204,20 @@ export class SetGdprSubTypeCommand extends Command {
         this.previousSubType = node.subType;
         node.subType = this.action.subType;
 
+        this.previousText = node.text;
+        if (this.node.editableLabel) {
+            this.node.editableLabel.text = this.formatSubType();
+        }
+
         return context.root;
     }
 
     undo(context: CommandExecutionContext): CommandReturn {
         if (this.node) {
             this.node.subType = this.previousSubType;
+            if (this.node.editableLabel && this.previousText) {
+                this.node.editableLabel.text = this.previousText;
+            }
         }
 
         return context.root;
@@ -217,8 +226,17 @@ export class SetGdprSubTypeCommand extends Command {
     redo(context: CommandExecutionContext): CommandReturn {
         if (this.node) {
             this.node.subType = this.action.subType;
+            this.node.text = this.formatSubType();
         }
 
         return context.root;
+    }
+
+    private formatSubType(): string {
+        if (this.action.subType) {
+            return this.action.subType.charAt(0).toUpperCase() + this.action.subType.slice(1);
+        } else {
+            return this.node?.getBaseTypeText() ?? "GDPR";
+        }
     }
 }

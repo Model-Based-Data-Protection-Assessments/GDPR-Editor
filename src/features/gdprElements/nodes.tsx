@@ -86,6 +86,8 @@ export abstract class GdprSubTypeNodeImpl<T extends string> extends GdprNodeImpl
 
     public abstract getPossibleSubTypes(): T[];
 
+    public abstract getBaseTypeText(): string;
+
     public getTypeText(): string {
         const baseType = this.getBaseTypeText();
         const subType = this.subType ?? "No Type specified";
@@ -110,8 +112,6 @@ export abstract class GdprSubTypeNodeImpl<T extends string> extends GdprNodeImpl
             return true;
         }
     }
-
-    protected abstract getBaseTypeText(): string;
 
     protected override calculateWidth(): number {
         const superWidth = super.calculateWidth();
@@ -157,7 +157,7 @@ type GdprProcessingType = (typeof gdprProcessingTypes)[number];
 export interface GdprProcessingNode extends GdprSubTypeNode<GdprProcessingType> {}
 
 export class GdprProcessingNodeImpl extends GdprSubTypeNodeImpl<GdprProcessingType> {
-    protected override getBaseTypeText(): string {
+    public override getBaseTypeText(): string {
         return "Processing";
     }
 
@@ -180,7 +180,7 @@ type GdprLegalBasisType = (typeof gdprLegalBasisTypes)[number];
 export interface GdprLegalBasisNode extends GdprSubTypeNode<GdprLegalBasisType> {}
 
 export class GdprLegalBasisNodeImpl extends GdprSubTypeNodeImpl<GdprLegalBasisType> {
-    protected override getBaseTypeText(): string {
+    public override getBaseTypeText(): string {
         return "Legal Basis";
     }
 
@@ -203,7 +203,7 @@ type GdprRoleType = (typeof gdprRoleTypes)[number];
 export interface GdprRoleNode extends GdprSubTypeNode<GdprRoleType> {}
 
 export class GdprRoleNodeImpl extends GdprSubTypeNodeImpl<GdprRoleType> {
-    protected override getBaseTypeText(): string {
+    public override getBaseTypeText(): string {
         return "Role";
     }
 
