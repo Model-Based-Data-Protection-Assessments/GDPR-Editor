@@ -4,6 +4,8 @@ import {
     GdprDataNodeImpl,
     GdprLegalBasisNodeImpl,
     GdprProcessingNodeImpl,
+    GdprPurposeNodeImpl,
+    GdprPurposeNodeView,
     GdprRoleNodeImpl,
     GdprSubTypeNodeView,
 } from "./nodes";
@@ -27,6 +29,7 @@ export const gdprElementsModule = new ContainerModule((bind, unbind, isBound, re
     configureModelElement(context, "node:gdpr-legalbasis", GdprLegalBasisNodeImpl, GdprSubTypeNodeView);
     configureModelElement(context, "node:gdpr-role", GdprRoleNodeImpl, GdprSubTypeNodeView);
     configureModelElement(context, "node:gdpr-data", GdprDataNodeImpl, GdprSubTypeNodeView);
+    configureModelElement(context, "node:gdpr-purpose", GdprPurposeNodeImpl, GdprPurposeNodeView);
 
     configureModelElement(context, "edge:gdpr", GdprEdgeImpl, GdprEdgeView, {
         enable: [withEditLabelFeature],

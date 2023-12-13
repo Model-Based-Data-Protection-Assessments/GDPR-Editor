@@ -242,3 +242,35 @@ export class GdprDataNodeImpl extends GdprSubTypeNodeImpl<GdprDataType> {
         return true;
     }
 }
+
+export interface GdprPurposeNode extends GdprNode {}
+
+export class GdprPurposeNodeImpl extends GdprNodeImpl {
+    protected override calculateWidth(): number {
+        return Math.max(super.calculateWidth(), 60);
+    }
+}
+
+export class GdprPurposeNodeView extends ShapeView {
+    render(node: Readonly<GdprPurposeNodeImpl>, context: RenderingContext): VNode | undefined {
+        if (!this.isVisible(node, context)) {
+            return undefined;
+        }
+
+        const { width, height } = node.bounds;
+
+        return (
+            <g class-sprotty-node={true} class-gdpr={true} style={{ opacity: node.opacity.toString() }}>
+                <rect x="0" y="0" width={width} height={height} />
+                <text x={width / 2} y="8" class-gdpr-type={true}>
+                    {`<<Purpose>>`}
+                </text>
+
+                {context.renderChildren(node, {
+                    xPosition: width / 2,
+                    yPosition: height / 2 + 4,
+                } as DfdPositionalLabelArgs)}
+            </g>
+        );
+    }
+}

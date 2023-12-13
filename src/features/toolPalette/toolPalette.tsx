@@ -123,6 +123,20 @@ export class ToolPaletteUI extends AbstractUIExtension implements IActionHandler
 
         this.addTool(
             containerElement,
+            this.nodeCreationTool,
+            "Purpose Node",
+            (tool) => tool.enable("node:gdpr-purpose"),
+            <g>
+                <rect x="10%" y="20%" width="80%" height="60%" stroke-width="1" />
+                <text x="50%" y="50%">
+                    Pur
+                </text>
+            </g>,
+            "KeyU",
+        );
+
+        this.addTool(
+            containerElement,
             this.edgeCreationTool,
             "Edge",
             (tool) => tool.enable("edge:gdpr"),
