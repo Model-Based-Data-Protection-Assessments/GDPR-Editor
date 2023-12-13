@@ -20,7 +20,7 @@ export interface GdprNode extends SNode {
     text?: string;
 }
 
-export class GdprNodeImpl extends DynamicChildrenNode implements WithEditableLabel {
+export abstract class GdprNodeImpl extends DynamicChildrenNode implements WithEditableLabel {
     static readonly DEFAULT_FEATURES = [...SNodeImpl.DEFAULT_FEATURES, withEditLabelFeature];
     private static readonly LABEL_TYPE = "label:positional";
 
@@ -29,6 +29,8 @@ export class GdprNodeImpl extends DynamicChildrenNode implements WithEditableLab
     protected nodeWidthPadding = 12;
 
     text?: string;
+
+    public abstract getEdgeLabel(sourceNode: GdprNodeImpl): string | undefined;
 
     override setChildren(schema: GdprNode): void {
         const children = [
@@ -157,6 +159,16 @@ type GdprProcessingType = (typeof gdprProcessingTypes)[number];
 export interface GdprProcessingNode extends GdprSubTypeNode<GdprProcessingType> {}
 
 export class GdprProcessingNodeImpl extends GdprSubTypeNodeImpl<GdprProcessingType> {
+    public override getEdgeLabel(sourceNode: GdprNodeImpl): string | undefined {
+        if (sourceNode instanceof GdprProcessingNodeImpl) {
+            return "following\nprocessing";
+        } else if (sourceNode instanceof GdprDataNodeImpl) {
+            return "in";
+        }
+
+        return undefined;
+    }
+
     public override getBaseTypeText(): string {
         return "Processing";
     }
@@ -180,6 +192,12 @@ type GdprLegalBasisType = (typeof gdprLegalBasisTypes)[number];
 export interface GdprLegalBasisNode extends GdprSubTypeNode<GdprLegalBasisType> {}
 
 export class GdprLegalBasisNodeImpl extends GdprSubTypeNodeImpl<GdprLegalBasisType> {
+    public override getEdgeLabel(sourceNode: GdprNodeImpl): string | undefined {
+        if (sourceNode instanceof GdprProcessingNodeImpl) {
+            return "on\nbasis\nof";
+        }
+    }
+
     public override getBaseTypeText(): string {
         return "Legal Basis";
     }
@@ -203,6 +221,18 @@ type GdprRoleType = (typeof gdprRoleTypes)[number];
 export interface GdprRoleNode extends GdprSubTypeNode<GdprRoleType> {}
 
 export class GdprRoleNodeImpl extends GdprSubTypeNodeImpl<GdprRoleType> {
+    public override getEdgeLabel(sourceNode: GdprNodeImpl): string | undefined {
+        if (this.subType === "Natural Person") {
+            if (sourceNode instanceof GdprLegalBasisNodeImpl && sourceNode.subType === "Consent") {
+                return "consentee";
+            } else if (sourceNode instanceof GdprDataNodeImpl && sourceNode.subType === "Personal Data") {
+                return "references";
+            }
+        }
+
+        return undefined;
+    }
+
     public override getBaseTypeText(): string {
         return "Role";
     }
@@ -226,6 +256,16 @@ type GdprDataType = (typeof gdprDataTypes)[number];
 export interface GdprDataNode extends GdprSubTypeNode<GdprDataType> {}
 
 export class GdprDataNodeImpl extends GdprSubTypeNodeImpl<GdprDataType> {
+    public override getEdgeLabel(sourceNode: GdprNodeImpl): string | undefined {
+        if (sourceNode instanceof GdprLegalBasisNodeImpl) {
+            return "defined data";
+        } else if (sourceNode instanceof GdprProcessingNodeImpl) {
+            return "out";
+        }
+
+        return undefined;
+    }
+
     public override getBaseTypeText(): string {
         return "Data";
     }
@@ -246,6 +286,10 @@ export class GdprDataNodeImpl extends GdprSubTypeNodeImpl<GdprDataType> {
 export interface GdprPurposeNode extends GdprNode {}
 
 export class GdprPurposeNodeImpl extends GdprNodeImpl {
+    public override getEdgeLabel(_sourceNode: GdprNodeImpl): string | undefined {
+        return undefined; // no edge labels at all
+    }
+
     protected override calculateWidth(): number {
         return Math.max(super.calculateWidth(), 60);
     }
