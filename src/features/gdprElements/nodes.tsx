@@ -177,12 +177,16 @@ export class GdprProcessingNodeImpl extends GdprSubTypeNodeImpl<GdprProcessingTy
         return [...gdprProcessingTypes];
     }
 
-    canConnect(_routable: SRoutableElementImpl, _role: string): boolean {
+    public override canConnect(routable: SRoutableElementImpl, role: string): boolean {
         if (this.subType === undefined) {
             return false;
         }
 
-        return true;
+        if (role === "source") {
+            return true;
+        } else {
+            return routable.source instanceof GdprProcessingNodeImpl || routable.source instanceof GdprDataNodeImpl;
+        }
     }
 }
 
@@ -206,12 +210,22 @@ export class GdprLegalBasisNodeImpl extends GdprSubTypeNodeImpl<GdprLegalBasisTy
         return [...gdprLegalBasisTypes];
     }
 
-    canConnect(_routable: SRoutableElementImpl, _role: string): boolean {
+    public override canConnect(routable: SRoutableElementImpl, role: string): boolean {
         if (this.subType === undefined) {
             return false;
         }
 
-        return true;
+        if (role === "source") {
+            if (this.subType === "Consent" || this.subType === "Contract") {
+                return true;
+            }
+
+            let outgoingEdges = 0;
+            this.outgoingEdges.forEach((_edge) => outgoingEdges++);
+            return outgoingEdges === 0;
+        } else {
+            return routable.source instanceof GdprProcessingNodeImpl;
+        }
     }
 }
 
@@ -241,12 +255,40 @@ export class GdprRoleNodeImpl extends GdprSubTypeNodeImpl<GdprRoleType> {
         return [...gdprRoleTypes];
     }
 
-    canConnect(_routable: SRoutableElementImpl, _role: string): boolean {
+    public override canConnect(routable: SRoutableElementImpl, role: string): boolean {
         if (this.subType === undefined) {
             return false;
         }
 
-        return true;
+        if (role === "source") {
+            return false;
+        } else {
+            if (
+                this.subType === "Natural Person" &&
+                routable.source instanceof GdprDataNodeImpl &&
+                routable.source.subType === "Personal Data"
+            ) {
+                return true;
+            }
+
+            if (!(routable.source instanceof GdprLegalBasisNodeImpl)) {
+                return false;
+            }
+
+            let natPersonConsenteeCount = 0;
+            this.incomingEdges
+                .filter((edge) => edge.source instanceof GdprLegalBasisNodeImpl && edge.source.subType === "Consent")
+                .forEach((_edge) => natPersonConsenteeCount++);
+            if (
+                this.subType === "Natural Person" &&
+                routable.source.subType === "Consent" &&
+                natPersonConsenteeCount === 0
+            ) {
+                return true;
+            }
+
+            return routable.source.subType === "Contract";
+        }
     }
 }
 
@@ -274,12 +316,29 @@ export class GdprDataNodeImpl extends GdprSubTypeNodeImpl<GdprDataType> {
         return [...gdprDataTypes];
     }
 
-    canConnect(_routable: SRoutableElementImpl, _role: string): boolean {
+    public override canConnect(routable: SRoutableElementImpl, role: string): boolean {
         if (this.subType === undefined) {
             return false;
         }
 
-        return true;
+        if (role === "source") {
+            return true;
+        } else {
+            if (routable.source instanceof GdprProcessingNodeImpl) {
+                return true;
+            }
+
+            if (routable.source instanceof GdprLegalBasisNodeImpl) {
+                let legalBasisDataCount = 0;
+                routable.source.outgoingEdges
+                    .filter((edge) => edge.target instanceof GdprDataNodeImpl)
+                    .forEach((_edge) => legalBasisDataCount++);
+
+                return legalBasisDataCount === 0;
+            }
+
+            return false;
+        }
     }
 }
 
@@ -292,6 +351,22 @@ export class GdprPurposeNodeImpl extends GdprNodeImpl {
 
     protected override calculateWidth(): number {
         return Math.max(super.calculateWidth(), 60);
+    }
+
+    public override canConnect(routable: SRoutableElementImpl, role: string): boolean {
+        if (role === "source") {
+            return false;
+        } else {
+            if (routable.source instanceof GdprProcessingNodeImpl) {
+                return true;
+            }
+
+            if (routable.source instanceof GdprLegalBasisNodeImpl && routable.source.subType === "Consent") {
+                return true;
+            }
+
+            return false;
+        }
     }
 }
 
