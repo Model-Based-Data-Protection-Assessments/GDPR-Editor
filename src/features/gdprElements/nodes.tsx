@@ -276,8 +276,8 @@ export class GdprRoleNodeImpl extends GdprSubTypeNodeImpl<GdprRoleType> {
             }
 
             let natPersonConsenteeCount = 0;
-            this.incomingEdges
-                .filter((edge) => edge.source instanceof GdprLegalBasisNodeImpl && edge.source.subType === "Consent")
+            routable.source.outgoingEdges
+                .filter((edge) => edge.target instanceof GdprRoleNodeImpl && edge.target.subType === "Natural Person")
                 .forEach((_edge) => natPersonConsenteeCount++);
             if (
                 this.subType === "Natural Person" &&
