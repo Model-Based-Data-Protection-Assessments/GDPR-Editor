@@ -292,7 +292,7 @@ export class GdprRoleNodeImpl extends GdprSubTypeNodeImpl<GdprRoleType> {
     }
 }
 
-const gdprDataTypes = ["Personal Data"];
+const gdprDataTypes = ["Data", "Personal Data"];
 type GdprDataType = (typeof gdprDataTypes)[number];
 
 export interface GdprDataNode extends GdprSubTypeNode<GdprDataType> {}
@@ -328,10 +328,12 @@ export class GdprDataNodeImpl extends GdprSubTypeNodeImpl<GdprDataType> {
                 return true;
             }
 
-            if (routable.source instanceof GdprLegalBasisNodeImpl) {
+            if (routable.source instanceof GdprLegalBasisNodeImpl && this.subType === "Personal Data") {
                 let legalBasisDataCount = 0;
                 routable.source.outgoingEdges
-                    .filter((edge) => edge.target instanceof GdprDataNodeImpl)
+                    .filter(
+                        (edge) => edge.target instanceof GdprDataNodeImpl && edge.target.subType === "Personal Data",
+                    )
                     .forEach((_edge) => legalBasisDataCount++);
 
                 return legalBasisDataCount === 0;

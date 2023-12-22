@@ -39,6 +39,7 @@ export class HelpUI extends AbstractUIExtension {
                     <p><kbd>CTRL</kbd>+<kbd>V</kbd>: Paste previously copied elements</p>
                     <p><kbd>Esc</kbd>: Disable current creation tool</p>
                     <p>Toggle Creation Tool: Refer to key in the tool palette</p>
+                    <p>Change Node Type: Right click on node</p>
                 </div>
             </div>
         `;
