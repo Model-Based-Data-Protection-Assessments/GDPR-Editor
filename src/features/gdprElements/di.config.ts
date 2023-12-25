@@ -9,7 +9,7 @@ import {
     GdprRoleNodeImpl,
     GdprSubTypeNodeView,
 } from "./nodes";
-import { GdprEdgeImpl, GdprEdgeView } from "./edges";
+import { ToggleGdprEdgeLabelTextCommand, GDPREdgeToggleLabelMouseListener, GdprEdgeImpl, GdprEdgeView } from "./edges";
 import { GdprSubTypeEditUI, GdprSubTypeEditUIMouseListener, SetGdprSubTypeCommand } from "./subTypeEditUI";
 
 import "./styles.css";
@@ -24,6 +24,9 @@ export const gdprElementsModule = new ContainerModule((bind, unbind, isBound, re
     bind(TYPES.IUIExtension).to(GdprSubTypeEditUI).inSingletonScope();
     bind(TYPES.MouseListener).to(GdprSubTypeEditUIMouseListener).inSingletonScope();
     configureCommand(context, SetGdprSubTypeCommand);
+
+    configureCommand(context, ToggleGdprEdgeLabelTextCommand);
+    bind(TYPES.MouseListener).to(GDPREdgeToggleLabelMouseListener).inSingletonScope();
 
     configureModelElement(context, "node:gdpr-processing", GdprProcessingNodeImpl, GdprSubTypeNodeView);
     configureModelElement(context, "node:gdpr-legalbasis", GdprLegalBasisNodeImpl, GdprSubTypeNodeView);

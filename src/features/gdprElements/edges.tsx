@@ -1,14 +1,36 @@
 /** @jsx svg */
 import { VNode } from "snabbdom";
-import { svg, RenderingContext, IViewArgs, SLabelImpl } from "sprotty";
-import { Point, SEdge, SLabel, angleOfPoint, toDegrees } from "sprotty-protocol";
+import {
+    svg,
+    RenderingContext,
+    IViewArgs,
+    SLabelImpl,
+    Command,
+    CommandExecutionContext,
+    CommandReturn,
+    TYPES,
+    MouseListener,
+    SModelElementImpl,
+} from "sprotty";
+import { Action, Point, SEdge, SLabel, angleOfPoint, toDegrees } from "sprotty-protocol";
 import { ArrowEdgeView } from "../dfdElements/edges";
 import { GdprNodeImpl } from "./nodes";
 import { DynamicChildrenEdge } from "../dfdElements/dynamicChildren";
+import { inject, injectable } from "inversify";
 
-export interface GdprEdge extends SEdge {}
+export interface GdprEdge extends SEdge {
+    /**
+     * Index of the label that should be displayed on the edge.
+     * If the edge has multiple possible labels, this index determines which one is displayed starting from 0.
+     * If the edge has only one possible label, this property is undefined.
+     * If the edge has no label, this property is undefined.
+     */
+    labelIndex?: number;
+}
 
 export class GdprEdgeImpl extends DynamicChildrenEdge {
+    labelIndex?: number;
+
     setChildren(schema: SEdge): void {
         schema.children = [
             {
@@ -70,11 +92,91 @@ export class GdprEdgeView extends ArrowEdgeView {
      *
      * @returns a string if there should be a edge label, undefined otherwise
      */
-    private determineEdgeLabel(edge: Readonly<GdprEdgeImpl>): string | undefined {
+    protected determineEdgeLabel(edge: GdprEdgeImpl): string | undefined {
         if (edge.source instanceof GdprNodeImpl && edge.target instanceof GdprNodeImpl) {
-            return edge.target.getEdgeLabel(edge.source);
+            const labelText = edge.target.getPossibleEdgeLabels(edge.source);
+            if (typeof labelText === "object") {
+                // labelText is an array. This means there are multiple possible labels.
+                // The user must choose one of through cycling through them by right clicking on the edge.
+                // The index of the selected edge label is used in this case.
+                const index = (edge.labelIndex ?? 0) % labelText.length;
+
+                // Save real index after modulo operation to make sure stored index is lowest possible index for this value.
+                edge.labelIndex = index;
+                return labelText[index];
+            } else {
+                // No selection possible. Just return the single available label text (if any).
+                edge.labelIndex = undefined;
+                return labelText;
+            }
         } else {
             return undefined;
         }
+    }
+}
+
+export interface ToggleGdprEdgeLabelTextAction extends Action {
+    readonly kind: typeof ToggleGdprEdgeLabelTextAction.KIND;
+    readonly edgeId: string;
+}
+export namespace ToggleGdprEdgeLabelTextAction {
+    export const KIND = "gdpr-edge-label-toggle-text";
+
+    export function create(edgeId: string): ToggleGdprEdgeLabelTextAction {
+        return { kind: KIND, edgeId };
+    }
+}
+
+/**
+ * For GDPR Edges with multiple possible labels, this command cycles forward through the possible labels.
+ */
+@injectable()
+export class ToggleGdprEdgeLabelTextCommand extends Command {
+    static readonly KIND = ToggleGdprEdgeLabelTextAction.KIND;
+
+    private edge?: GdprEdgeImpl;
+    private previousIndex?: number;
+    private newIndex?: number;
+
+    constructor(@inject(TYPES.Action) private readonly action: ToggleGdprEdgeLabelTextAction) {
+        super();
+    }
+
+    execute(context: CommandExecutionContext): CommandReturn {
+        const edge = context.root.index.getById(this.action.edgeId);
+        if (edge instanceof GdprEdgeImpl) {
+            this.edge = edge;
+            this.previousIndex = edge.labelIndex;
+            this.previousIndex = this.previousIndex ?? 0;
+            this.newIndex = this.previousIndex + 1;
+            edge.labelIndex = this.newIndex;
+        }
+
+        return context.root;
+    }
+
+    undo(context: CommandExecutionContext): CommandReturn {
+        if (this.edge) {
+            this.edge.labelIndex = this.previousIndex;
+        }
+        return context.root;
+    }
+
+    redo(context: CommandExecutionContext): CommandReturn {
+        if (this.edge) {
+            this.edge.labelIndex = this.newIndex;
+        }
+        return context.root;
+    }
+}
+
+@injectable()
+export class GDPREdgeToggleLabelMouseListener extends MouseListener {
+    mouseDown(target: SModelElementImpl, event: MouseEvent): (Action | Promise<Action>)[] {
+        if (event.button === 2 && target instanceof GdprEdgeImpl) {
+            return [ToggleGdprEdgeLabelTextAction.create(target.id)];
+        }
+
+        return [];
     }
 }

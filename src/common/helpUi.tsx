@@ -40,6 +40,7 @@ export class HelpUI extends AbstractUIExtension {
                     <p><kbd>Esc</kbd>: Disable current creation tool</p>
                     <p>Toggle Creation Tool: Refer to key in the tool palette</p>
                     <p>Change Node Type: Right click on node</p>
+                    <p>Change Processing -> Data Direction Label: Right click on edge</p>
                 </div>
             </div>
         `;

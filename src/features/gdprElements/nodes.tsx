@@ -30,7 +30,7 @@ export abstract class GdprNodeImpl extends DynamicChildrenNode implements WithEd
 
     text?: string;
 
-    public abstract getEdgeLabel(sourceNode: GdprNodeImpl): string | undefined;
+    public abstract getPossibleEdgeLabels(sourceNode: GdprNodeImpl): string[] | string | undefined;
 
     override setChildren(schema: GdprNode): void {
         const children = [
@@ -159,11 +159,9 @@ type GdprProcessingType = (typeof gdprProcessingTypes)[number];
 export interface GdprProcessingNode extends GdprSubTypeNode<GdprProcessingType> {}
 
 export class GdprProcessingNodeImpl extends GdprSubTypeNodeImpl<GdprProcessingType> {
-    public override getEdgeLabel(sourceNode: GdprNodeImpl): string | undefined {
+    public override getPossibleEdgeLabels(sourceNode: GdprNodeImpl): string | undefined {
         if (sourceNode instanceof GdprProcessingNodeImpl) {
             return "following\nprocessing";
-        } else if (sourceNode instanceof GdprDataNodeImpl) {
-            return "in";
         }
 
         return undefined;
@@ -196,7 +194,7 @@ type GdprLegalBasisType = (typeof gdprLegalBasisTypes)[number];
 export interface GdprLegalBasisNode extends GdprSubTypeNode<GdprLegalBasisType> {}
 
 export class GdprLegalBasisNodeImpl extends GdprSubTypeNodeImpl<GdprLegalBasisType> {
-    public override getEdgeLabel(sourceNode: GdprNodeImpl): string | undefined {
+    public override getPossibleEdgeLabels(sourceNode: GdprNodeImpl): string | undefined {
         if (sourceNode instanceof GdprProcessingNodeImpl) {
             return "on\nbasis\nof";
         }
@@ -235,7 +233,7 @@ type GdprRoleType = (typeof gdprRoleTypes)[number];
 export interface GdprRoleNode extends GdprSubTypeNode<GdprRoleType> {}
 
 export class GdprRoleNodeImpl extends GdprSubTypeNodeImpl<GdprRoleType> {
-    public override getEdgeLabel(sourceNode: GdprNodeImpl): string | undefined {
+    public override getPossibleEdgeLabels(sourceNode: GdprNodeImpl): string | undefined {
         if (this.subType === "Natural Person") {
             if (sourceNode instanceof GdprLegalBasisNodeImpl && sourceNode.subType === "Consent") {
                 return "consentee";
@@ -298,11 +296,11 @@ type GdprDataType = (typeof gdprDataTypes)[number];
 export interface GdprDataNode extends GdprSubTypeNode<GdprDataType> {}
 
 export class GdprDataNodeImpl extends GdprSubTypeNodeImpl<GdprDataType> {
-    public override getEdgeLabel(sourceNode: GdprNodeImpl): string | undefined {
+    public override getPossibleEdgeLabels(sourceNode: GdprNodeImpl): string[] | string | undefined {
         if (sourceNode instanceof GdprLegalBasisNodeImpl) {
             return "defined data";
         } else if (sourceNode instanceof GdprProcessingNodeImpl) {
-            return "out";
+            return ["in", "out"];
         }
 
         return undefined;
@@ -347,7 +345,7 @@ export class GdprDataNodeImpl extends GdprSubTypeNodeImpl<GdprDataType> {
 export interface GdprPurposeNode extends GdprNode {}
 
 export class GdprPurposeNodeImpl extends GdprNodeImpl {
-    public override getEdgeLabel(_sourceNode: GdprNodeImpl): string | undefined {
+    public override getPossibleEdgeLabels(_sourceNode: GdprNodeImpl): undefined {
         return undefined; // no edge labels at all
     }
 
