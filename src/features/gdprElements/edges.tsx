@@ -171,7 +171,7 @@ export class ToggleGdprEdgeLabelTextCommand extends Command {
 }
 
 @injectable()
-export class GDPREdgeToggleLabelMouseListener extends MouseListener {
+export class GdprEdgeToggleLabelMouseListener extends MouseListener {
     mouseDown(target: SModelElementImpl, event: MouseEvent): (Action | Promise<Action>)[] {
         if (event.button === 2 && target instanceof GdprEdgeImpl) {
             return [ToggleGdprEdgeLabelTextAction.create(target.id)];

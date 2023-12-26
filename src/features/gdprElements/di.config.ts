@@ -9,8 +9,9 @@ import {
     GdprRoleNodeImpl,
     GdprSubTypeNodeView,
 } from "./nodes";
-import { ToggleGdprEdgeLabelTextCommand, GDPREdgeToggleLabelMouseListener, GdprEdgeImpl, GdprEdgeView } from "./edges";
+import { ToggleGdprEdgeLabelTextCommand, GdprEdgeToggleLabelMouseListener, GdprEdgeImpl, GdprEdgeView } from "./edges";
 import { GdprSubTypeEditUI, GdprSubTypeEditUIMouseListener, SetGdprSubTypeCommand } from "./subTypeEditUI";
+import { GdprValidationResultPopupMouseListener, GdprValidationResultPopupUI } from "./validationErrorsPopup";
 
 import "./styles.css";
 
@@ -26,7 +27,11 @@ export const gdprElementsModule = new ContainerModule((bind, unbind, isBound, re
     configureCommand(context, SetGdprSubTypeCommand);
 
     configureCommand(context, ToggleGdprEdgeLabelTextCommand);
-    bind(TYPES.MouseListener).to(GDPREdgeToggleLabelMouseListener).inSingletonScope();
+    bind(TYPES.MouseListener).to(GdprEdgeToggleLabelMouseListener).inSingletonScope();
+
+    bind(GdprValidationResultPopupMouseListener).toSelf().inSingletonScope();
+    bind(TYPES.MouseListener).toService(GdprValidationResultPopupMouseListener);
+    bind(TYPES.IUIExtension).to(GdprValidationResultPopupUI).inSingletonScope();
 
     configureModelElement(context, "node:gdpr-processing", GdprProcessingNodeImpl, GdprSubTypeNodeView);
     configureModelElement(context, "node:gdpr-legalbasis", GdprLegalBasisNodeImpl, GdprSubTypeNodeView);

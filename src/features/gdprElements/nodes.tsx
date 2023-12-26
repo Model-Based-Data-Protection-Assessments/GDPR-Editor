@@ -30,7 +30,18 @@ export abstract class GdprNodeImpl extends DynamicChildrenNode implements WithEd
 
     text?: string;
 
+    /**
+     * Returns the edge label texts for edge that have this node as their target.
+     * Can return undefined for no label, a string for a single label or an array of strings from which the user can choose one.
+     * @param sourceNode the node that is at the source of the edge
+     */
     public abstract getPossibleEdgeLabels(sourceNode: GdprNodeImpl): string[] | string | undefined;
+
+    /**
+     * Returns true if the node is in a valid state.
+     * Otherwise a list of validation errors is returned explaining why the node is not valid as-is.
+     */
+    public abstract validateNode(): string[] | true;
 
     override setChildren(schema: GdprNode): void {
         const children = [
@@ -86,6 +97,14 @@ export interface GdprSubTypeNode<T extends string> extends GdprNode {
 export abstract class GdprSubTypeNodeImpl<T extends string> extends GdprNodeImpl {
     subType: T | undefined;
 
+    public override validateNode(): true | string[] {
+        if (this.subType === undefined) {
+            return ["Node Sub Type is not set."];
+        }
+
+        return true;
+    }
+
     public abstract getPossibleSubTypes(): T[];
 
     public abstract getBaseTypeText(): string;
@@ -131,12 +150,13 @@ export class GdprSubTypeNodeView extends ShapeView {
         }
 
         const { width, height } = node.bounds;
+        const valid = node.validateNode();
 
         return (
             <g
                 class-sprotty-node={true}
                 class-gdpr={true}
-                class-gdpr-type-missing={node.subType === undefined}
+                class-gdpr-validation-errors={valid !== true}
                 style={{ opacity: node.opacity.toString() }}
             >
                 <rect x="0" y="0" width={width} height={height} />
@@ -165,6 +185,31 @@ export class GdprProcessingNodeImpl extends GdprSubTypeNodeImpl<GdprProcessingTy
         }
 
         return undefined;
+    }
+
+    public override validateNode(): true | string[] {
+        const result = [];
+        if (super.validateNode() !== true) {
+            result.push(...(super.validateNode() as string[]));
+        }
+
+        let referredLegalBasisCount = 0;
+        this.outgoingEdges
+            .filter((edge) => edge.target instanceof GdprLegalBasisNodeImpl)
+            .forEach((_edge) => referredLegalBasisCount++);
+        if (referredLegalBasisCount === 0) {
+            result.push("A Processing Node must refer to at least one Legal Basis Node.");
+        }
+
+        let referredPurposeCount = 0;
+        this.outgoingEdges
+            .filter((edge) => edge.target instanceof GdprPurposeNodeImpl)
+            .forEach((_edge) => referredPurposeCount++);
+        if (referredPurposeCount === 0) {
+            result.push("A Processing Node must refer to at least one Purpose Node.");
+        }
+
+        return result.length > 0 ? result : true;
     }
 
     public override getBaseTypeText(): string {
@@ -198,6 +243,47 @@ export class GdprLegalBasisNodeImpl extends GdprSubTypeNodeImpl<GdprLegalBasisTy
         if (sourceNode instanceof GdprProcessingNodeImpl) {
             return "on\nbasis\nof";
         }
+    }
+
+    public override validateNode(): true | string[] {
+        const results = [];
+        if (super.validateNode() !== true) {
+            results.push(...(super.validateNode() as string[]));
+        }
+
+        let referredDataCount = 0;
+        this.outgoingEdges
+            .filter((edge) => edge.target instanceof GdprDataNodeImpl)
+            .forEach((_edge) => referredDataCount++);
+        if (referredDataCount > 1) {
+            results.push("A Legal Basis Node can only refer to none or one Data Node.");
+        }
+
+        let referredNaturalPersonCount = 0;
+        this.outgoingEdges
+            .filter((edge) => edge.target instanceof GdprRoleNodeImpl && edge.target.subType === "Natural Person")
+            .forEach((_edge) => referredNaturalPersonCount++);
+        if (this.subType === "Consent" && referredNaturalPersonCount !== 1) {
+            results.push("A Consent Node must have exactly one Natural Person as a consentee.");
+        }
+
+        let referredPurposeCount = 0;
+        this.outgoingEdges
+            .filter((edge) => edge.target instanceof GdprPurposeNodeImpl)
+            .forEach((_edge) => referredPurposeCount++);
+        if (this.subType === "Consent" && referredPurposeCount === 0) {
+            results.push("A Consent Node must refer to at least one Purpose Node.");
+        }
+
+        let referredRoleCount = 0;
+        this.outgoingEdges
+            .filter((edge) => edge.target instanceof GdprRoleNodeImpl)
+            .forEach((_edge) => referredRoleCount++);
+        if (this.subType === "Contract" && referredRoleCount !== 2) {
+            results.push("A Contract Node must refer to exactly two Role Nodes.");
+        }
+
+        return results.length > 0 ? results : true;
     }
 
     public override getBaseTypeText(): string {
@@ -347,6 +433,10 @@ export interface GdprPurposeNode extends GdprNode {}
 export class GdprPurposeNodeImpl extends GdprNodeImpl {
     public override getPossibleEdgeLabels(_sourceNode: GdprNodeImpl): undefined {
         return undefined; // no edge labels at all
+    }
+
+    public override validateNode(): true | string[] {
+        return true;
     }
 
     protected override calculateWidth(): number {

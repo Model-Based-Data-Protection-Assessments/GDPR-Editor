@@ -2,9 +2,9 @@
     font-size: 6pt;
 }
 
-.sprotty-node.gdpr-type-missing rect {
+.sprotty-node.gdpr-validation-errors rect {
     stroke: var(--color-error);
 }
-.sprotty-node.gdpr-type-missing text {
+.sprotty-node.gdpr-validation-errors text {
     fill: var(--color-error);
 }
