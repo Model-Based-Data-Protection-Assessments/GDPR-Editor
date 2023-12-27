@@ -99,7 +99,7 @@ export abstract class GdprSubTypeNodeImpl<T extends string> extends GdprNodeImpl
 
     public override validateNode(): true | string[] {
         if (this.subType === undefined) {
-            return ["Node Sub Type is not set."];
+            return ["Node Sub Type is not set"];
         }
 
         return true;
@@ -128,7 +128,7 @@ export abstract class GdprSubTypeNodeImpl<T extends string> extends GdprNodeImpl
         this.outgoingEdges.forEach((_edge) => edgeCount++);
 
         if (edgeCount > 0) {
-            return "Node Sub Type is not changeable because the node has edges connected to it.";
+            return "Node Sub Type is not changeable because the node has edges connected to it";
         } else {
             return true;
         }
@@ -198,7 +198,7 @@ export class GdprProcessingNodeImpl extends GdprSubTypeNodeImpl<GdprProcessingTy
             .filter((edge) => edge.target instanceof GdprLegalBasisNodeImpl)
             .forEach((_edge) => referredLegalBasisCount++);
         if (referredLegalBasisCount === 0) {
-            result.push("A Processing Node must refer to at least one Legal Basis Node.");
+            result.push("A Processing Node must refer to at least one Legal Basis Node");
         }
 
         let referredPurposeCount = 0;
@@ -206,7 +206,7 @@ export class GdprProcessingNodeImpl extends GdprSubTypeNodeImpl<GdprProcessingTy
             .filter((edge) => edge.target instanceof GdprPurposeNodeImpl)
             .forEach((_edge) => referredPurposeCount++);
         if (referredPurposeCount === 0) {
-            result.push("A Processing Node must refer to at least one Purpose Node.");
+            result.push("A Processing Node must refer to at least one Purpose Node");
         }
 
         return result.length > 0 ? result : true;
@@ -256,7 +256,7 @@ export class GdprLegalBasisNodeImpl extends GdprSubTypeNodeImpl<GdprLegalBasisTy
             .filter((edge) => edge.target instanceof GdprDataNodeImpl)
             .forEach((_edge) => referredDataCount++);
         if (referredDataCount > 1) {
-            results.push("A Legal Basis Node can only refer to none or one Data Node.");
+            results.push("A Legal Basis Node can only refer to none or one Data Node");
         }
 
         let referredNaturalPersonCount = 0;
@@ -264,7 +264,7 @@ export class GdprLegalBasisNodeImpl extends GdprSubTypeNodeImpl<GdprLegalBasisTy
             .filter((edge) => edge.target instanceof GdprRoleNodeImpl && edge.target.subType === "Natural Person")
             .forEach((_edge) => referredNaturalPersonCount++);
         if (this.subType === "Consent" && referredNaturalPersonCount !== 1) {
-            results.push("A Consent Node must have exactly one Natural Person as a consentee.");
+            results.push("A Consent Node must have exactly one Natural Person as a consentee");
         }
 
         let referredPurposeCount = 0;
@@ -272,7 +272,7 @@ export class GdprLegalBasisNodeImpl extends GdprSubTypeNodeImpl<GdprLegalBasisTy
             .filter((edge) => edge.target instanceof GdprPurposeNodeImpl)
             .forEach((_edge) => referredPurposeCount++);
         if (this.subType === "Consent" && referredPurposeCount === 0) {
-            results.push("A Consent Node must refer to at least one Purpose Node.");
+            results.push("A Consent Node must refer to at least one Purpose Node");
         }
 
         let referredRoleCount = 0;
@@ -280,7 +280,7 @@ export class GdprLegalBasisNodeImpl extends GdprSubTypeNodeImpl<GdprLegalBasisTy
             .filter((edge) => edge.target instanceof GdprRoleNodeImpl)
             .forEach((_edge) => referredRoleCount++);
         if (this.subType === "Contract" && referredRoleCount !== 2) {
-            results.push("A Contract Node must refer to exactly two Role Nodes.");
+            results.push("A Contract Node must refer to exactly two Role Nodes");
         }
 
         return results.length > 0 ? results : true;

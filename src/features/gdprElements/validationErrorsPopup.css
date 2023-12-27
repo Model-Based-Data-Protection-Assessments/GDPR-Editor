@@ -1,0 +1,15 @@
+.gdpr-validation-result-popup {
+    /* don't break lines into multiple when they don't fit on screen.
+       Just let the popup clip outside the screen when there is not enough space and let the
+       user move the popup at a position where the text is fully visible */
+    white-space: nowrap;
+}
+
+.gdpr-validation-result-popup p {
+    margin: 12px;
+}
+
+.gdpr-validation-result-popup ul {
+    margin: 8px 0;
+    padding-left: 20px;
+}

@@ -12,6 +12,8 @@ import {
 import { Action } from "sprotty-protocol";
 import { GdprNodeImpl } from "./nodes";
 
+import "./validationErrorsPopup.css";
+
 @injectable()
 export class GdprValidationResultPopupMouseListener extends MouseListener {
     private stillTimeout: NodeJS.Timeout | undefined;
@@ -140,9 +142,14 @@ export class GdprValidationResultPopupUI extends AbstractUIExtension {
         containerElement.style.left = `${mousePosition.x - 2}px`;
         containerElement.style.top = `${mousePosition.y - 2}px`;
 
-        const text = validationResults.map((result) => {
-            return `- ${result}`;
+        this.validationParagraph.innerText = "This node is invalid because";
+        const validationUnorderedList = document.createElement("ul");
+        validationResults.forEach((validationResult) => {
+            const validationListItem = document.createElement("li");
+            validationListItem.innerText = validationResult;
+            validationUnorderedList.appendChild(validationListItem);
         });
-        this.validationParagraph.innerText = text.join("\n");
+
+        this.validationParagraph.appendChild(validationUnorderedList);
     }
 }
