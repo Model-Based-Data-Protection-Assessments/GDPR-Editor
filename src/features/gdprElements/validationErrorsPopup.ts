@@ -11,6 +11,7 @@ import {
 } from "sprotty";
 import { Action } from "sprotty-protocol";
 import { GdprNodeImpl } from "./nodes";
+import { GdprSubTypeEditUI } from "./subTypeEditUI";
 
 import "./validationErrorsPopup.css";
 
@@ -19,7 +20,10 @@ export class GdprValidationResultPopupMouseListener extends MouseListener {
     private stillTimeout: NodeJS.Timeout | undefined;
     private lastPosition = { x: 0, y: 0 };
 
-    constructor(@inject(TYPES.IActionDispatcher) private readonly actionDispatcher: IActionDispatcher) {
+    constructor(
+        @inject(TYPES.IActionDispatcher) private readonly actionDispatcher: IActionDispatcher,
+        @inject(GdprSubTypeEditUI) private readonly subTypeEditUI: GdprSubTypeEditUI,
+    ) {
         super();
     }
 
@@ -42,6 +46,23 @@ export class GdprValidationResultPopupMouseListener extends MouseListener {
             this.stillTimeout = setTimeout(() => {
                 // When the mouse has not moved for 500ms, we show the popup
                 this.stillTimeout = undefined;
+
+                if (gdprNode.opacity !== 1) {
+                    // Only show when opacity is 1.
+                    // The opacity is not 1 when the node is currently being created but has not been
+                    // placed yet or when the node is being filtered out by a global node filter.
+                    // In this case we don't want to show the popup
+                    // and interfere with the creation process.
+                    return;
+                }
+
+                console.log(this.subTypeEditUI.isOpen(), this.subTypeEditUI);
+                if (this.subTypeEditUI.isOpen()) {
+                    // The sub type edit UI is open, so we don't want to show the popup
+                    // because it would interfere with the GDPR sub type edit selector UI.
+                    return;
+                }
+
                 this.showPopup(gdprNode);
             }, 500);
         }

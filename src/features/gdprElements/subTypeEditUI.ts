@@ -153,6 +153,14 @@ export class GdprSubTypeEditUI extends AbstractUIExtension {
         this.actionDispatcher.dispatch(SetGdprSubTypeAction.create(this.node.id, this.subTypeSelect.value));
         this.hide();
     }
+
+    /**
+     * Returns whether the UI is currently shown.
+     * Returns false if the UI is invisible.
+     */
+    public isOpen(): boolean {
+        return this.containerElement.style.visibility === "visible";
+    }
 }
 
 export interface SetGdprSubTypeAction extends Action {

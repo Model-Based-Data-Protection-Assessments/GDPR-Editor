@@ -22,7 +22,8 @@ export const gdprElementsModule = new ContainerModule((bind, unbind, isBound, re
 
     const context = { bind, unbind, isBound, rebind };
 
-    bind(TYPES.IUIExtension).to(GdprSubTypeEditUI).inSingletonScope();
+    bind(GdprSubTypeEditUI).toSelf().inSingletonScope();
+    bind(TYPES.IUIExtension).toService(GdprSubTypeEditUI);
     bind(TYPES.MouseListener).to(GdprSubTypeEditUIMouseListener).inSingletonScope();
     configureCommand(context, SetGdprSubTypeCommand);
 
