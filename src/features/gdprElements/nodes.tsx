@@ -173,7 +173,7 @@ export class GdprSubTypeNodeView extends ShapeView {
     }
 }
 
-const gdprProcessingTypes = ["Collecting", "Usage", "Transferring", "Storage"] as const;
+export const gdprProcessingTypes = ["Collecting", "Usage", "Transferring", "Storage"] as const;
 type GdprProcessingType = (typeof gdprProcessingTypes)[number];
 
 export interface GdprProcessingNode extends GdprSubTypeNode<GdprProcessingType> {}
@@ -233,7 +233,7 @@ export class GdprProcessingNodeImpl extends GdprSubTypeNodeImpl<GdprProcessingTy
     }
 }
 
-const gdprLegalBasisTypes = ["Public Authority", "Consent", "Contract"];
+export const gdprLegalBasisTypes = ["Public Authority", "Consent", "Contract"];
 type GdprLegalBasisType = (typeof gdprLegalBasisTypes)[number];
 
 export interface GdprLegalBasisNode extends GdprSubTypeNode<GdprLegalBasisType> {}
@@ -313,7 +313,7 @@ export class GdprLegalBasisNodeImpl extends GdprSubTypeNodeImpl<GdprLegalBasisTy
     }
 }
 
-const gdprRoleTypes = ["Natural Person", "Third Party", "Controller"];
+export const gdprRoleTypes = ["Natural Person", "Third Party", "Controller"];
 type GdprRoleType = (typeof gdprRoleTypes)[number];
 
 export interface GdprRoleNode extends GdprSubTypeNode<GdprRoleType> {}
@@ -376,7 +376,7 @@ export class GdprRoleNodeImpl extends GdprSubTypeNodeImpl<GdprRoleType> {
     }
 }
 
-const gdprDataTypes = ["Data", "Personal Data"];
+export const gdprDataTypes = ["Data", "Personal Data"];
 type GdprDataType = (typeof gdprDataTypes)[number];
 
 export interface GdprDataNode extends GdprSubTypeNode<GdprDataType> {}
