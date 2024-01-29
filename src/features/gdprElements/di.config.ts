@@ -36,7 +36,9 @@ export const gdprElementsModule = new ContainerModule((bind, unbind, isBound, re
     bind(TYPES.MouseListener).toService(GdprValidationResultPopupMouseListener);
     bind(TYPES.IUIExtension).to(GdprValidationResultPopupUI).inSingletonScope();
 
+    bind(GdprFilterUI).toSelf().inSingletonScope();
     bind(TYPES.IUIExtension).to(GdprFilterUI);
+    bind(TYPES.KeyListener).to(GdprFilterUI);
     bind(EDITOR_TYPES.DefaultUIElement).to(GdprFilterUI);
 
     configureModelElement(context, "node:gdpr-processing", GdprProcessingNodeImpl, GdprSubTypeNodeView);

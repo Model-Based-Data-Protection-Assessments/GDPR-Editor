@@ -1,4 +1,14 @@
-import { AbstractUIExtension, CommandStack, SChildElementImpl, SEdgeImpl, SNodeImpl, TYPES } from "sprotty";
+import {
+    AbstractUIExtension,
+    CommandStack,
+    KeyListener,
+    SChildElementImpl,
+    SConnectableElementImpl,
+    SEdgeImpl,
+    SModelElementImpl,
+    SNodeImpl,
+    TYPES,
+} from "sprotty";
 import {
     GdprNodeImpl,
     GdprSubTypeNodeImpl,
@@ -7,12 +17,15 @@ import {
     gdprProcessingTypes,
     gdprRoleTypes,
 } from "./nodes";
+import { inject } from "inversify";
+import { Action } from "sprotty-protocol";
+import { matchesKeystroke } from "sprotty/lib/utils/keyboard";
 
 import "./filterUi.css";
-import { inject } from "inversify";
 
-export class GdprFilterUI extends AbstractUIExtension {
+export class GdprFilterUI extends AbstractUIExtension implements KeyListener {
     static readonly ID = "gdpr-filter-ui";
+
     private nodeTypeSelectElement = document.createElement("select") as HTMLSelectElement;
     private nodeSubtypeSelectElement = document.createElement("select") as HTMLSelectElement;
     private nodeNameInputElement = document.createElement("input") as HTMLInputElement;
@@ -48,17 +61,17 @@ export class GdprFilterUI extends AbstractUIExtension {
             </label>
             <div class="accordion-content">
                 <div class="gdpr-filter-ui-inner">
-                    <p>Node Type: <select id="gdpr-filter-node-type"></select></p>
-                    <p>Node Subtype: <select id="gdpr-filter-node-subtype"></select></p>
-                    <p>Node Name: <input type="text" id="gdpr-filter-node-name"></p>
-                    <p>Direction:
+                    <p><span>Node Type:</span> <select id="gdpr-filter-node-type"></select></p>
+                    <p><span>Node Subtype:</span> <select id="gdpr-filter-node-subtype"></select></p>
+                    <p><span>Node Name:</span> <input type="text" id="gdpr-filter-node-name"></p>
+                    <p><span>Direction:</span>
                         <select id="gdpr-filter-direction">
                             <option value="references">References</option>
-                            <option value="referenced">Referenced</option>
+                            <option value="referenced">Referenced by</option>
                             <option value="both">Both</option>
                         </select>
                     </p>
-                    <p>Search depth: <input type="number" id="gdpr-filter-search-depth" value="1"></p>
+                    <p><span>Search depth:</span> <input type="number" id="gdpr-filter-search-depth" value="1"></p>
                 </div>
             </div>
         `;
@@ -121,7 +134,7 @@ export class GdprFilterUI extends AbstractUIExtension {
         this.commandStack.update(model);
     }
 
-    private filterNode(element: SChildElementImpl): void {
+    private filterNode(element: SChildElementImpl | SConnectableElementImpl): void {
         if (!(element instanceof GdprNodeImpl)) {
             // Node must be a gdpr node
             return;
@@ -154,5 +167,62 @@ export class GdprFilterUI extends AbstractUIExtension {
         }
 
         element.opacity = 1;
+        this.traverseNodes(element, parseInt(this.searchDepthInputElement.value));
+    }
+
+    private traverseNodes(element: SChildElementImpl | SConnectableElementImpl, remainingDepth: number): boolean {
+        if (remainingDepth < 0) {
+            // Reached the end of the search depth
+            return false;
+        }
+
+        if (!(element instanceof SNodeImpl)) {
+            // Element must be a node
+            return false;
+        }
+
+        const direction = this.filterDirectionSelectElement.value;
+
+        if (direction === "both" || direction === "references") {
+            // Traverse references
+            element.outgoingEdges.forEach((edge) => {
+                if (edge.target && this.traverseNodes(edge.target, remainingDepth - 1)) {
+                    edge.opacity = 1;
+                }
+            });
+        }
+
+        if (direction === "both" || direction === "referenced") {
+            // Traverse referenced nodes
+            element.incomingEdges.forEach((edge) => {
+                if (edge.source && this.traverseNodes(edge.source, remainingDepth - 1)) {
+                    edge.opacity = 1;
+                }
+            });
+        }
+
+        element.opacity = 1;
+        return true;
+    }
+
+    keyDown(_element: SModelElementImpl, event: KeyboardEvent): Action[] {
+        if (matchesKeystroke(event, "KeyF")) {
+            // For some reason accessing the accordion state element directly through the class/object variable
+            // does not work so we get it from the dom again each time.
+            const accordionStateElement = document.getElementById(
+                "accordion-state-gdpr-filter",
+            ) as HTMLInputElement | null;
+            if (!accordionStateElement) {
+                this.logger.error(this, "Could not find accordion state element");
+                return [];
+            }
+            accordionStateElement.checked = !accordionStateElement.checked;
+        }
+
+        return [];
+    }
+
+    keyUp(_element: SModelElementImpl, _event: KeyboardEvent): Action[] {
+        return []; // ignored
     }
 }
