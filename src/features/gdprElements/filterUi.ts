@@ -71,7 +71,7 @@ export class GdprFilterUI extends AbstractUIExtension implements KeyListener {
                             <option value="both">Both</option>
                         </select>
                     </p>
-                    <p><span>Search depth:</span> <input type="number" id="gdpr-filter-search-depth" value="1"></p>
+                    <p><span>Search depth:</span> <input type="number" id="gdpr-filter-search-depth" value="0"></p>
                 </div>
             </div>
         `;
@@ -136,6 +136,16 @@ export class GdprFilterUI extends AbstractUIExtension implements KeyListener {
 
     private filterNode(element: SChildElementImpl | SConnectableElementImpl): void {
         if (!(element instanceof GdprNodeImpl)) {
+            if (
+                element instanceof SEdgeImpl &&
+                this.nodeTypeSelectElement.value === "All" &&
+                this.nodeNameInputElement.value === ""
+            ) {
+                // Special case: all nodes are selected and no node is filtered out
+                // => all edges should be fully visible too
+                element.opacity = 1;
+            }
+
             // Node must be a gdpr node
             return;
         }
@@ -207,8 +217,6 @@ export class GdprFilterUI extends AbstractUIExtension implements KeyListener {
 
     keyDown(_element: SModelElementImpl, event: KeyboardEvent): Action[] {
         if (matchesKeystroke(event, "KeyF")) {
-            // For some reason accessing the accordion state element directly through the class/object variable
-            // does not work so we get it from the dom again each time.
             const accordionStateElement = document.getElementById(
                 "accordion-state-gdpr-filter",
             ) as HTMLInputElement | null;
