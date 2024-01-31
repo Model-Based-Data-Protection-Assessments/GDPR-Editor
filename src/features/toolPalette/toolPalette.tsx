@@ -76,7 +76,7 @@ export class ToolPaletteUI extends AbstractUIExtension implements IActionHandler
                     Png
                 </text>
             </g>,
-            "KeyP",
+            "Digit1",
         );
 
         this.addTool(
@@ -90,7 +90,7 @@ export class ToolPaletteUI extends AbstractUIExtension implements IActionHandler
                     LgB
                 </text>
             </g>,
-            "KeyL",
+            "Digit2",
         );
 
         this.addTool(
@@ -104,7 +104,7 @@ export class ToolPaletteUI extends AbstractUIExtension implements IActionHandler
                     Rol
                 </text>
             </g>,
-            "KeyR",
+            "Digit3",
         );
 
         this.addTool(
@@ -118,7 +118,7 @@ export class ToolPaletteUI extends AbstractUIExtension implements IActionHandler
                     Dat
                 </text>
             </g>,
-            "KeyD",
+            "Digit4",
         );
 
         this.addTool(
@@ -132,7 +132,7 @@ export class ToolPaletteUI extends AbstractUIExtension implements IActionHandler
                     Pur
                 </text>
             </g>,
-            "KeyU",
+            "Digit5",
         );
 
         this.addTool(
@@ -144,7 +144,7 @@ export class ToolPaletteUI extends AbstractUIExtension implements IActionHandler
                 <path d="M 4,4 L 28,28" attrs-stroke-width="2" />
                 <path d="M -3,3 L 6,6 L 3,-3" transform="translate(22,22)" attrs-stroke-width="2" />
             </g>,
-            "KeyE",
+            "Digit6",
         );
 
         containerElement.classList.add("tool-palette");
@@ -205,13 +205,20 @@ export class ToolPaletteUI extends AbstractUIExtension implements IActionHandler
 
         const shortcutElement = document.createElement("kbd");
         shortcutElement.classList.add("shortcut");
-        shortcutElement.textContent = enableKey?.replace("Key", "") ?? "";
+        shortcutElement.textContent = enableKey?.replace("Key", "").replace("Digit", "") ?? "";
         toolElement.appendChild(shortcutElement);
 
         if (enableKey) {
             this.keyboardShortcuts.set(enableKey, () => {
                 toolElement.click();
             });
+
+            // Also add the shortcut for the corresponding numpad key
+            if (enableKey.startsWith("Digit")) {
+                this.keyboardShortcuts.set(enableKey.replace("Digit", "Numpad") as KeyCode, () => {
+                    toolElement.click();
+                });
+            }
         }
     }
 
