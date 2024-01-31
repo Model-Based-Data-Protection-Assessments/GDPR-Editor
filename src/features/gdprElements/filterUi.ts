@@ -108,6 +108,7 @@ export class GdprFilterUI extends AbstractUIExtension implements KeyListener {
         // Rebuild the sub type select element based on the selected node type.
         this.nodeSubtypeSelectElement.innerHTML = "";
         this.nodeSubtypeSelectElement.options.add(new Option("All", "All"));
+        this.nodeSubtypeSelectElement.options.add(new Option("None", "None"));
         GdprFilterUI.nodeTypes[this.nodeTypeSelectElement.value]?.forEach((nodeSubtype) => {
             this.nodeSubtypeSelectElement.options.add(new Option(nodeSubtype, nodeSubtype));
         });
@@ -162,7 +163,13 @@ export class GdprFilterUI extends AbstractUIExtension implements KeyListener {
 
         // Filter node direction (if a filter is set)
         if (element instanceof GdprSubTypeNodeImpl && this.nodeSubtypeSelectElement.value !== "All") {
-            if (element.subType !== this.nodeSubtypeSelectElement.value) {
+            const subTypeSelection = this.nodeSubtypeSelectElement.value;
+            // When subTypeSelection is not "None" then the element sub type must match the filter
+            // When subTypeSelection is "None" then the element sub type must be undefined
+            if (
+                (subTypeSelection !== "None" && element.subType !== subTypeSelection) ||
+                (subTypeSelection === "None" && element.subType)
+            ) {
                 // Node sub type does not match the filter => skip
                 return;
             }
