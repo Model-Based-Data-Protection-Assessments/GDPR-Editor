@@ -26,6 +26,9 @@ import "./filterUi.css";
 export class GdprFilterUI extends AbstractUIExtension implements KeyListener {
     static readonly ID = "gdpr-filter-ui";
 
+    private static readonly HIDDEN_OPACITY = 0.3;
+    private static readonly VISIBLE_OPACITY = 1;
+
     private nodeTypeSelectElement = document.createElement("select") as HTMLSelectElement;
     private nodeSubtypeSelectElement = document.createElement("select") as HTMLSelectElement;
     private nodeNameInputElement = document.createElement("input") as HTMLInputElement;
@@ -124,7 +127,7 @@ export class GdprFilterUI extends AbstractUIExtension implements KeyListener {
         // Step 1: Set opacity of all nodes to be not within the filter
         model.children.forEach((element) => {
             if (element instanceof SNodeImpl || element instanceof SEdgeImpl) {
-                element.opacity = 0.5;
+                element.opacity = GdprFilterUI.HIDDEN_OPACITY;
             }
         });
 
@@ -144,7 +147,7 @@ export class GdprFilterUI extends AbstractUIExtension implements KeyListener {
             ) {
                 // Special case: all nodes are selected and no node is filtered out
                 // => all edges should be fully visible too
-                element.opacity = 1;
+                element.opacity = GdprFilterUI.VISIBLE_OPACITY;
             }
 
             // Node must be a gdpr node
@@ -183,7 +186,7 @@ export class GdprFilterUI extends AbstractUIExtension implements KeyListener {
             }
         }
 
-        element.opacity = 1;
+        element.opacity = GdprFilterUI.VISIBLE_OPACITY;
         this.traverseNodes(element, parseInt(this.searchDepthInputElement.value));
     }
 
@@ -204,7 +207,7 @@ export class GdprFilterUI extends AbstractUIExtension implements KeyListener {
             // Traverse references
             element.outgoingEdges.forEach((edge) => {
                 if (edge.target && this.traverseNodes(edge.target, remainingDepth - 1)) {
-                    edge.opacity = 1;
+                    edge.opacity = GdprFilterUI.VISIBLE_OPACITY;
                 }
             });
         }
@@ -213,12 +216,12 @@ export class GdprFilterUI extends AbstractUIExtension implements KeyListener {
             // Traverse referenced nodes
             element.incomingEdges.forEach((edge) => {
                 if (edge.source && this.traverseNodes(edge.source, remainingDepth - 1)) {
-                    edge.opacity = 1;
+                    edge.opacity = GdprFilterUI.VISIBLE_OPACITY;
                 }
             });
         }
 
-        element.opacity = 1;
+        element.opacity = GdprFilterUI.VISIBLE_OPACITY;
         return true;
     }
 
