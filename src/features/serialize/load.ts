@@ -155,9 +155,11 @@ export class LoadDiagramCommand extends Command {
      * Currently this means that the features property is removed from all model elements recursively.
      * Additionally the canvasBounds property is removed from the root element, because it may change
      * depending on browser window.
+     * The opacity property is removed from all elements because it is only used at runtime
+     * for filtering. When a model is loaded, all elements should be visible and have the default opacity (1).
      * In the future this method may be extended to preprocess other properties.
      *
-     * The feature property at runtime is a js Set with the relevant features.
+     * The features property at runtime is a js Set with the relevant features.
      * E.g. for the top graph this is the viewportFeature among others.
      * When converting js Sets objects into json, the result is an empty js object.
      * When loading the object is converted into an empty js Set and the features are lost.
@@ -168,10 +170,12 @@ export class LoadDiagramCommand extends Command {
      * @param modelSchema The model schema to preprocess
      */
     public static preprocessModelSchema(modelSchema: SModelRoot): void {
-        // These properties are all not included in the root typing.
+        // See function doc comment for explanation why these properties are removed.
         "features" in modelSchema && delete modelSchema["features"];
         "canvasBounds" in modelSchema && delete modelSchema["canvasBounds"];
+        "opacity" in modelSchema && delete modelSchema["opacity"];
 
+        // Recursively preprocess children
         if (modelSchema.children) {
             modelSchema.children.forEach((child: any) => this.preprocessModelSchema(child));
         }
