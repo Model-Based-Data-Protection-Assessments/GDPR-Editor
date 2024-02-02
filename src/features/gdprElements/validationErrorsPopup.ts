@@ -56,7 +56,6 @@ export class GdprValidationResultPopupMouseListener extends MouseListener {
                     return;
                 }
 
-                console.log(this.subTypeEditUI.isOpen(), this.subTypeEditUI);
                 if (this.subTypeEditUI.isOpen()) {
                     // The sub type edit UI is open, so we don't want to show the popup
                     // because it would interfere with the GDPR sub type edit selector UI.
