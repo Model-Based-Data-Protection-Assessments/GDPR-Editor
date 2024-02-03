@@ -159,7 +159,7 @@ export class GdprSubTypeEditUI extends AbstractUIExtension {
      * Returns false if the UI is invisible.
      */
     public isOpen(): boolean {
-        return this.containerElement.style.visibility === "visible";
+        return this.containerElement?.style.visibility === "visible";
     }
 }
 
