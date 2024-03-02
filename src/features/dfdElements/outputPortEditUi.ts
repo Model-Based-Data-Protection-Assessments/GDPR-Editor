@@ -29,6 +29,7 @@ import "monaco-editor/esm/vs/editor/contrib/inlineCompletions/browser/inlineComp
 
 import "./outputPortEditUi.css";
 import { LabelTypeRegistry } from "../labels/labelTypeRegistry";
+import { EditorModeController } from "../editorMode/editorModeController";
 
 /**
  * Detects when a dfd output port is double clicked and shows the OutputPortEditUI
@@ -354,6 +355,9 @@ export class OutputPortEditUI extends AbstractUIExtension {
         @inject(TYPES.DOMHelper) private domHelper: DOMHelper,
         @inject(PortBehaviorValidator) private validator: PortBehaviorValidator,
         @inject(LabelTypeRegistry) @optional() private labelTypeRegistry?: LabelTypeRegistry,
+        @inject(EditorModeController)
+        @optional()
+        private editorModeController?: EditorModeController,
     ) {
         super();
     }
@@ -371,6 +375,9 @@ export class OutputPortEditUI extends AbstractUIExtension {
         containerElement.appendChild(this.unavailableInputsLabel);
         containerElement.appendChild(this.editorContainer);
         containerElement.appendChild(this.validationLabel);
+        const keyboardShortcutLabel = document.createElement("div");
+        keyboardShortcutLabel.innerHTML = "Press <kbd>CTRL</kbd>+<kbd>Space</kbd> for autocompletion";
+        containerElement.appendChild(keyboardShortcutLabel);
 
         containerElement.classList.add("ui-float");
         this.unavailableInputsLabel.classList.add("unavailable-inputs");
@@ -395,11 +402,46 @@ export class OutputPortEditUI extends AbstractUIExtension {
             lineNumbersMinChars: 3, // default is 5, which we'll never need. Save a bit of space.
             folding: false, // Not supported by our language definition
             wordBasedSuggestions: "off", // Does not really work for our use case
+            scrollBeyondLastLine: false, // Not needed
             theme: monacoTheme,
             language: dfdLanguageName,
         });
 
         this.configureHandlers(containerElement);
+    }
+
+    private resizeEditor(): void {
+        // Resize editor to fit content.
+        // Has ranges for height and width to prevent the editor from getting too small or too large.
+        const e = this.editor;
+        if (!e) {
+            return;
+        }
+
+        // For the height we can use the content height from the editor.
+        const height = e.getContentHeight();
+
+        // For the width we cannot really do this.
+        // Monaco needs about 500ms to figure out the correct width when initially showing the editor.
+        // In the mean time the width will be too small and after the update
+        // the window size will jump visibly.
+        // So for the width we use this calculation to approximate the width.
+        const maxLineLength = e
+            .getValue()
+            .split("\n")
+            .reduce((max, line) => Math.max(max, line.length), 0);
+        const width = 100 + maxLineLength * 8;
+
+        const clamp = (value: number, range: readonly [number, number]) =>
+            Math.min(range[1], Math.max(range[0], value));
+
+        const heightRange = [100, 250] as const;
+        const widthRange = [275, 500] as const;
+
+        const cHeight = clamp(height, heightRange);
+        const cWidth = clamp(width, widthRange);
+
+        e.layout({ height: cHeight, width: cWidth });
     }
 
     private configureHandlers(containerElement: HTMLElement): void {
@@ -413,11 +455,25 @@ export class OutputPortEditUI extends AbstractUIExtension {
             this.validateBehavior();
         });
 
+        // When the content size of the editor changes, resize the editor accordingly.
+        this.editor?.onDidContentSizeChange(() => {
+            this.resizeEditor();
+        });
+
         // Hide/"close this window" when pressing escape.
         containerElement.addEventListener("keydown", (event) => {
             if (matchesKeystroke(event, "Escape")) {
                 this.hide();
             }
+        });
+
+        // Configure editor readonly depending on editor mode.
+        // Is set after opening the editor each time but the
+        // editor mode may change while the editor is open, making this handler necessary.
+        this.editorModeController?.onModeChange(() => {
+            this.editor?.updateOptions({
+                readOnly: this.editorModeController?.isReadOnly() ?? false,
+            });
         });
     }
 
@@ -458,7 +514,12 @@ export class OutputPortEditUI extends AbstractUIExtension {
 
         // Load the current behavior text of the port into the text editor.
         this.editor?.setValue(this.port.behavior);
-        this.editor?.layout();
+        this.resizeEditor();
+
+        // Configure editor readonly depending on editor mode
+        this.editor?.updateOptions({
+            readOnly: this.editorModeController?.isReadOnly() ?? false,
+        });
 
         // Validation of loaded behavior text.
         this.validateBehavior();
