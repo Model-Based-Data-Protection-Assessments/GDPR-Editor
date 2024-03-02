@@ -124,8 +124,23 @@ export class GdprValidationResultPopupUI extends AbstractUIExtension {
         containerElement.classList.add("ui-float");
         containerElement.appendChild(this.validationParagraph);
 
-        containerElement.addEventListener("mouseleave", () => {
-            this.hide();
+        document.addEventListener("mousemove", (event) => {
+            if (containerElement.style.visibility === "hidden") {
+                // Not visible anyway, no need to do the check
+                return;
+            }
+
+            // If mouse not in popup => hide
+            const rect = containerElement.getBoundingClientRect();
+            console.log(rect);
+            if (
+                event.clientX < rect.left ||
+                event.clientX > rect.right ||
+                event.clientY < rect.top ||
+                event.clientY > rect.bottom
+            ) {
+                this.hide();
+            }
         });
     }
 
@@ -155,13 +170,17 @@ export class GdprValidationResultPopupUI extends AbstractUIExtension {
         }
 
         const mousePosition = this.mouseListener.getMousePosition();
+
+        // Set position
         // 2 offset to ensure the mouse is inside the popup when showing it.
-        // Otherwise it would be on the gdpr node because of the rounded corners.
-        // The cursor should be inside the popup when opening it for the closing
-        // using the mouseleave event to work correctly.
+        // Otherwise it would be on the node instead of the popup because of the rounded corners.
+        // When moving the cursor from the node to the popup, the popup would move a bit
+        // because the cursor is going a bit over the model and then the popup would re-show
+        // with the new position after the timeout.
         containerElement.style.left = `${mousePosition.x - 2}px`;
         containerElement.style.top = `${mousePosition.y - 2}px`;
 
+        // Set content
         this.validationParagraph.innerText = "This node is invalid because";
         const validationUnorderedList = document.createElement("ul");
         validationResults.forEach((validationResult) => {
