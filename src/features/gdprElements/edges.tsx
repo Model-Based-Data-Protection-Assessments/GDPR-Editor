@@ -11,7 +11,6 @@ import {
     TYPES,
     MouseListener,
     SModelElementImpl,
-    ConsoleLogger,
 } from "sprotty";
 import { Action, Point, SEdge, SLabel, angleOfPoint, toDegrees } from "sprotty-protocol";
 import { ArrowEdgeView } from "../dfdElements/edges";
@@ -32,7 +31,7 @@ export interface GdprEdge extends SEdge {
 
 export class GdprEdgeImpl extends DynamicChildrenEdge {
     labelIndex?: number;
-    text: string;
+    text: string = "";
 
     setChildren(schema: SEdge): void {
         schema.children = [
