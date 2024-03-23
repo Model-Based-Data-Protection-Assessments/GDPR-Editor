@@ -173,7 +173,7 @@ export class GdprSubTypeNodeView extends ShapeView {
     }
 }
 
-export const gdprProcessingTypes = ["Collecting", "Usage", "Transferring", "Storage"] as const;
+export const gdprProcessingTypes = ["Collecting", "Usage", "Transferring", "Storage", "Processing"] as const;
 type GdprProcessingType = (typeof gdprProcessingTypes)[number];
 
 export interface GdprProcessingNode extends GdprSubTypeNode<GdprProcessingType> {}
@@ -233,7 +233,7 @@ export class GdprProcessingNodeImpl extends GdprSubTypeNodeImpl<GdprProcessingTy
     }
 }
 
-export const gdprLegalBasisTypes = ["Public Authority", "Consent", "Contract"];
+export const gdprLegalBasisTypes = ["Public Authority", "Consent", "Contract", "Obligation"];
 type GdprLegalBasisType = (typeof gdprLegalBasisTypes)[number];
 
 export interface GdprLegalBasisNode extends GdprSubTypeNode<GdprLegalBasisType> {}
@@ -320,6 +320,9 @@ export interface GdprRoleNode extends GdprSubTypeNode<GdprRoleType> {}
 
 export class GdprRoleNodeImpl extends GdprSubTypeNodeImpl<GdprRoleType> {
     public override getPossibleEdgeLabels(sourceNode: GdprNodeImpl): string | undefined {
+        if (sourceNode instanceof GdprProcessingNodeImpl) {
+            return "responsible";
+        }
         if (this.subType === "Natural Person") {
             if (sourceNode instanceof GdprLegalBasisNodeImpl && sourceNode.subType === "Consent") {
                 return "consentee";
@@ -352,6 +355,10 @@ export class GdprRoleNodeImpl extends GdprSubTypeNodeImpl<GdprRoleType> {
                 routable.source instanceof GdprDataNodeImpl &&
                 routable.source.subType === "Personal Data"
             ) {
+                return true;
+            }
+
+            if (routable.source instanceof GdprProcessingNodeImpl) {
                 return true;
             }
 

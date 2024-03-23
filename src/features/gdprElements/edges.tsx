@@ -11,6 +11,7 @@ import {
     TYPES,
     MouseListener,
     SModelElementImpl,
+    ConsoleLogger,
 } from "sprotty";
 import { Action, Point, SEdge, SLabel, angleOfPoint, toDegrees } from "sprotty-protocol";
 import { ArrowEdgeView } from "../dfdElements/edges";
@@ -26,10 +27,12 @@ export interface GdprEdge extends SEdge {
      * If the edge has no label, this property is undefined.
      */
     labelIndex?: number;
+    subtype: "";
 }
 
 export class GdprEdgeImpl extends DynamicChildrenEdge {
     labelIndex?: number;
+    text: string;
 
     setChildren(schema: SEdge): void {
         schema.children = [
@@ -62,6 +65,7 @@ export class GdprEdgeImpl extends DynamicChildrenEdge {
 
 export class GdprEdgeView extends ArrowEdgeView {
     protected renderAdditionals(edge: GdprEdgeImpl, segments: Point[], _context: RenderingContext): VNode[] {
+        edge.text = this.determineEdgeLabel(edge) ?? "";
         const p1 = segments[segments.length - 2];
         const p2 = segments[segments.length - 1];
         const arrow = (
@@ -103,10 +107,12 @@ export class GdprEdgeView extends ArrowEdgeView {
 
                 // Save real index after modulo operation to make sure stored index is lowest possible index for this value.
                 edge.labelIndex = index;
+
                 return labelText[index];
             } else {
                 // No selection possible. Just return the single available label text (if any).
                 edge.labelIndex = undefined;
+
                 return labelText;
             }
         } else {
