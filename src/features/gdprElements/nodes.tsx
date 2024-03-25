@@ -440,7 +440,7 @@ export class GdprDataNodeImpl extends GdprSubTypeNodeImpl<GdprDataType> {
 export interface GdprPurposeNode extends GdprNode {}
 
 export class GdprPurposeNodeImpl extends GdprNodeImpl {
-    public override getPossibleEdgeLabels(sourceNode: GdprNodeImpl): undefined {
+    public override getPossibleEdgeLabels(sourceNode: GdprNodeImpl): string | undefined {
         if (sourceNode instanceof GdprProcessingNodeImpl) {
             return "serves purpose";
         } else if (sourceNode instanceof GdprLegalBasisNodeImpl) {
