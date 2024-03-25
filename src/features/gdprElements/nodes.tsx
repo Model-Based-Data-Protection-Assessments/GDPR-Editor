@@ -271,16 +271,16 @@ export class GdprLegalBasisNodeImpl extends GdprSubTypeNodeImpl<GdprLegalBasisTy
         this.outgoingEdges
             .filter((edge) => edge.target instanceof GdprPurposeNodeImpl)
             .forEach((_edge) => referredPurposeCount++);
-        if (this.subType === "Consent" && referredPurposeCount === 0) {
-            results.push("A Consent Node must refer to at least one Purpose Node");
+        if (referredPurposeCount === 0) {
+            results.push("A Legal Basis Node must refer to at least one Purpose Node");
         }
 
         let referredRoleCount = 0;
         this.outgoingEdges
             .filter((edge) => edge.target instanceof GdprRoleNodeImpl)
             .forEach((_edge) => referredRoleCount++);
-        if (this.subType === "Contract" && referredRoleCount !== 2) {
-            results.push("A Contract Node must refer to exactly two Role Nodes");
+        if (this.subType === "Contract" && referredRoleCount < 2) {
+            results.push("A Contract Node must refer to at least two Role Nodes");
         }
 
         return results.length > 0 ? results : true;
@@ -322,6 +322,8 @@ export class GdprRoleNodeImpl extends GdprSubTypeNodeImpl<GdprRoleType> {
     public override getPossibleEdgeLabels(sourceNode: GdprNodeImpl): string | undefined {
         if (sourceNode instanceof GdprProcessingNodeImpl) {
             return "responsible";
+        } else if (sourceNode instanceof GdprLegalBasisNodeImpl && sourceNode.subType === "Contract") {
+            return "contract party";
         }
         if (this.subType === "Natural Person") {
             if (sourceNode instanceof GdprLegalBasisNodeImpl && sourceNode.subType === "Consent") {
@@ -438,8 +440,12 @@ export class GdprDataNodeImpl extends GdprSubTypeNodeImpl<GdprDataType> {
 export interface GdprPurposeNode extends GdprNode {}
 
 export class GdprPurposeNodeImpl extends GdprNodeImpl {
-    public override getPossibleEdgeLabels(_sourceNode: GdprNodeImpl): undefined {
-        return undefined; // no edge labels at all
+    public override getPossibleEdgeLabels(sourceNode: GdprNodeImpl): undefined {
+        if (sourceNode instanceof GdprProcessingNodeImpl) {
+            return "serves purpose";
+        } else if (sourceNode instanceof GdprLegalBasisNodeImpl) {
+            return "for purpose";
+        }
     }
 
     public override validateNode(): true | string[] {
@@ -458,7 +464,7 @@ export class GdprPurposeNodeImpl extends GdprNodeImpl {
                 return true;
             }
 
-            if (routable.source instanceof GdprLegalBasisNodeImpl && routable.source.subType === "Consent") {
+            if (routable.source instanceof GdprLegalBasisNodeImpl) {
                 return true;
             }
 
