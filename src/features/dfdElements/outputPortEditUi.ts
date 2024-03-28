@@ -7,6 +7,7 @@ import {
     CommandReturn,
     CommitModelAction,
     MouseListener,
+    MouseTool,
     SModelElementImpl,
     SModelRootImpl,
     SetUIExtensionVisibilityAction,
@@ -21,6 +22,9 @@ import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import { DfdOutputPortImpl } from "./ports";
 import { DfdNodeImpl } from "./nodes";
 import { PortBehaviorValidator } from "./outputPortBehaviorValidation";
+import { LabelTypeRegistry } from "../labels/labelTypeRegistry";
+import { EditorModeController } from "../editorMode/editorModeController";
+import { DFDBehaviorRefactorer } from "./labelTypeChangeWatcher";
 
 // Enable hover feature that is used to show validation errors.
 // Inline completions are enabled to allow autocompletion of keywords and inputs/label types/label values.
@@ -28,8 +32,6 @@ import "monaco-editor/esm/vs/editor/contrib/hover/browser/hover";
 import "monaco-editor/esm/vs/editor/contrib/inlineCompletions/browser/inlineCompletions.contribution.js";
 
 import "./outputPortEditUi.css";
-import { LabelTypeRegistry } from "../labels/labelTypeRegistry";
-import { EditorModeController } from "../editorMode/editorModeController";
 
 /**
  * Detects when a dfd output port is double clicked and shows the OutputPortEditUI
@@ -353,8 +355,17 @@ export class OutputPortEditUI extends AbstractUIExtension {
         @inject(TYPES.IActionDispatcher) private actionDispatcher: ActionDispatcher,
         @inject(TYPES.ViewerOptions) private viewerOptions: ViewerOptions,
         @inject(TYPES.DOMHelper) private domHelper: DOMHelper,
+        @inject(MouseTool) private mouseTool: MouseTool,
         @inject(PortBehaviorValidator) private validator: PortBehaviorValidator,
-        @inject(LabelTypeRegistry) @optional() private labelTypeRegistry?: LabelTypeRegistry,
+
+        // Load label type registry watcher that handles changes to the behavior of
+        // output ports when label types are changed.
+        // It has to be loaded somewhere for inversify to create it and start watching.
+        // Since this is thematically related to the output port edit UI, it is loaded here.
+        // @ts-expect-error TS6133: 'labelTypeRegistry' is declared but its value is never read.
+        @inject(DFDBehaviorRefactorer) private readonly _labelTypeChangeWatcher: DFDBehaviorRefactorer,
+
+        @inject(LabelTypeRegistry) @optional() private readonly labelTypeRegistry?: LabelTypeRegistry,
         @inject(EditorModeController)
         @optional()
         private editorModeController?: EditorModeController,
@@ -368,7 +379,7 @@ export class OutputPortEditUI extends AbstractUIExtension {
 
     containerClass(): string {
         // The container element gets this class name by the sprotty base class.
-        return "output-port-edit-ui";
+        return this.id();
     }
 
     protected initializeContents(containerElement: HTMLElement): void {
@@ -467,6 +478,23 @@ export class OutputPortEditUI extends AbstractUIExtension {
             }
         });
 
+        containerElement.addEventListener("mouseleave", () => {
+            // User might refactor some label type/value.
+            // Doing so will change the behavior text of all ports referencing the label type/value.
+            // Save the value so the user doesn't lose their work.
+            // After the change of the behavior text, it will be reloaded into here with the refactoring done.
+            this.save();
+        });
+        this.labelTypeRegistry?.onUpdate(() => {
+            // The update handler for the refactoring might be after our handler.
+            // Delay update to the next event loop tick to ensure the refactoring is done.
+            setTimeout(() => {
+                if (this.editor && this.port) {
+                    this.editor?.setValue(this.port?.behavior);
+                }
+            }, 0);
+        });
+
         // Configure editor readonly depending on editor mode.
         // Is set after opening the editor each time but the
         // editor mode may change while the editor is open, making this handler necessary.
@@ -475,6 +503,20 @@ export class OutputPortEditUI extends AbstractUIExtension {
                 readOnly: this.editorModeController?.isReadOnly() ?? false,
             });
         });
+
+        const portEditUi = this;
+        class ZoomMouseListener extends MouseListener {
+            wheel(_target: SModelElementImpl, _event: WheelEvent): (Action | Promise<Action>)[] {
+                // Re-set position of the UI after next event loop tick.
+                // In the current event loop tick the scoll is still processed and the
+                // position of the port may change after the scroll processing, so we need to wait for that.
+                setTimeout(() => {
+                    portEditUi.setPosition(containerElement);
+                });
+                return [];
+            }
+        }
+        this.mouseTool.register(new ZoomMouseListener());
     }
 
     protected onBeforeShow(
